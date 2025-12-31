@@ -169,6 +169,78 @@ function hoangphi_add_luxury_video_reel() {
 }
 
 /**
+ * Component: Hero Banner Section - Responsive với <picture> tag
+ * Sử dụng thẻ <picture> cho ảnh (tối ưu performance) và video riêng
+ */
+function hoangphi_render_hero_banner() {
+    $settings_id = 80; // ID trang cài đặt
+    $type = get_field('hero_type', $settings_id);
+    $headline = get_field('hero_headline', $settings_id);
+    $subheadline = get_field('hero_subheadline', $settings_id);
+    $btn_text = get_field('hero_button_text', $settings_id);
+    $btn_link = get_field('hero_button_link', $settings_id);
+    
+    // Nếu không có dữ liệu, không hiển thị
+    if ( ! $headline && ! $subheadline ) return;
+    
+    // Lấy URLs cho image
+    $img_desktop = get_field('hero_image_desktop', $settings_id);
+    $img_mobile = get_field('hero_image_mobile', $settings_id);
+    ?>
+    <section class="relative h-[80vh] w-full overflow-hidden bg-white">
+        
+        <?php if ($type == 'video') : ?>
+            <!-- Video: Vẫn dùng cách cũ vì <picture> chỉ cho ảnh -->
+            <div class="absolute inset-0">
+                <video autoplay muted loop playsinline class="hidden md:block w-full h-full object-cover">
+                    <source src="<?php echo esc_url( get_field('hero_video_desktop', $settings_id) ); ?>" type="video/mp4">
+                </video>
+                <video autoplay muted loop playsinline class="block md:hidden w-full h-full object-cover">
+                    <source src="<?php echo esc_url( get_field('hero_video_mobile', $settings_id) ); ?>" type="video/mp4">
+                </video>
+                <div class="absolute inset-0 bg-black/10"></div>
+            </div>
+        <?php else : ?>
+            <!-- Image: Dùng thẻ <picture> để tối ưu performance -->
+            <picture class="absolute inset-0 w-full h-full">
+                <source srcset="<?php echo esc_url( $img_mobile ); ?>" media="(max-width: 767px)">
+                
+                <img src="<?php echo esc_url( $img_desktop ); ?>" 
+                     alt="Hero Banner" 
+                     class="w-full h-full object-cover object-center"
+                     loading="eager" 
+                     fetchpriority="high">
+            </picture>
+        <?php endif; ?>
+
+        <div class="relative z-10 h-full flex flex-col items-center justify-center text-center px-6 bg-black/5">
+            <?php if ( $subheadline ) : ?>
+                <span class="text-[11px] font-bold uppercase tracking-[0.4em] text-white mb-4 drop-shadow-sm">
+                    <?php echo esc_html( $subheadline ); ?>
+                </span>
+            <?php endif; ?>
+            
+            <?php if ( $headline ) : ?>
+                <h1 class="text-4xl md:text-7xl font-light text-white uppercase tracking-[0.2em] mb-10 leading-tight drop-shadow-md">
+                    <?php echo nl2br( esc_html( $headline ) ); ?>
+                </h1>
+            <?php endif; ?>
+            
+            <?php if ( $btn_text && $btn_link ) : ?>
+                <a href="<?php echo esc_url( $btn_link ); ?>" 
+                   class="bg-white text-black px-12 py-4 text-[11px] font-bold uppercase tracking-[0.3em] hover:bg-black hover:text-white transition-all duration-500">
+                    <?php echo esc_html( $btn_text ); ?>
+                </a>
+            <?php endif; ?>
+        </div>
+    </section>
+    <?php
+}
+
+// Hook Hero Banner vào đầu trang chủ (priority 10)
+add_action( 'hoangphi_homepage_content', 'hoangphi_render_hero_banner', 10 );
+
+/**
  * Component: Section New Arrivals
  */
 function hoangphi_render_new_arrivals_section() {

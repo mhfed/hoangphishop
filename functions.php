@@ -334,3 +334,38 @@ add_filter( 'template_include', function( $template ) {
     }
     return $template;
 }, 99 );
+
+/**
+ * Tối giản hóa các ô nhập liệu trong Checkout
+ * Ẩn các trường không cần thiết cho khách hàng Việt Nam
+ * Thêm placeholder thay thế labels
+ */
+add_filter( 'woocommerce_checkout_fields', 'hoangphi_custom_checkout_fields' );
+
+function hoangphi_custom_checkout_fields( $fields ) {
+    // Ẩn các trường thừa
+    unset( $fields['billing']['billing_company'] );
+    unset( $fields['billing']['billing_postcode'] );
+    unset( $fields['billing']['billing_address_2'] );
+    unset( $fields['billing']['billing_country'] ); // Mặc định là VN rồi
+
+    // Ẩn labels - dùng placeholder thay thế
+    $fields['billing']['billing_first_name']['label'] = '';
+    $fields['billing']['billing_phone']['label'] = '';
+    $fields['billing']['billing_email']['label'] = '';
+    $fields['billing']['billing_address_1']['label'] = '';
+
+    // Đổi placeholder cho thân thiện
+    $fields['billing']['billing_first_name']['placeholder'] = 'HỌ VÀ TÊN';
+    $fields['billing']['billing_phone']['placeholder'] = 'SỐ ĐIỆN THOẠI';
+    $fields['billing']['billing_email']['placeholder'] = 'ĐỊA CHỈ EMAIL';
+    $fields['billing']['billing_address_1']['placeholder'] = 'ĐỊA CHỈ GIAO HÀNG';
+
+    // Sắp xếp lại thứ tự: Tên -> Số điện thoại -> Email -> Địa chỉ
+    $fields['billing']['billing_first_name']['priority'] = 10;
+    $fields['billing']['billing_phone']['priority'] = 20;
+    $fields['billing']['billing_email']['priority'] = 30;
+    $fields['billing']['billing_address_1']['priority'] = 40;
+
+    return $fields;
+}

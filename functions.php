@@ -233,3 +233,12 @@ function hoangphi_render_best_sellers() {
     <?php
 }
 add_action('hoangphi_homepage_content', 'hoangphi_render_best_sellers', 30);
+
+/**
+ * Output Related Products Section với Swiper
+ */
+function hoangphi_output_related_products() {
+    get_template_part( 'template-parts/single-related' );
+}
+// Chèn vào cuối trang sản phẩm
+add_action( 'woocommerce_after_single_product', 'hoangphi_output_related_products', 20 );

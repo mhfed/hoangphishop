@@ -21,6 +21,28 @@ document.addEventListener('DOMContentLoaded', function () {
     },
   });
 
+  // 2. Related Products Swiper
+  const relatedSwiper = new Swiper('.related-swiper', {
+    slidesPerView: 2,
+    spaceBetween: 20,
+    navigation: {
+      nextEl: '.related-next',
+      prevEl: '.related-prev',
+    },
+    breakpoints: {
+      // Desktop
+      1024: {
+        slidesPerView: 4,
+        spaceBetween: 30,
+      },
+      // Tablet
+      768: {
+        slidesPerView: 3,
+        spaceBetween: 20,
+      },
+    },
+  });
+
   // 2. Logic điều khiển Video
   const slides = document.querySelectorAll('.swiper-slide');
 

@@ -43,6 +43,26 @@ document.addEventListener('DOMContentLoaded', function () {
     },
   });
 
+  // 3. Product Reels Swiper
+  if (document.querySelector('.reelsSwiper')) {
+    const reelsSwiper = new Swiper('.reelsSwiper', {
+      slidesPerView: 2.2,
+      spaceBetween: 16,
+      freeMode: true,
+      loop: true,
+      breakpoints: {
+        768: {
+          slidesPerView: 4.2,
+          spaceBetween: 20,
+        },
+        1024: {
+          slidesPerView: 6.2,
+          spaceBetween: 24,
+        },
+      },
+    });
+  }
+
   // 2. Logic điều khiển Video
   const slides = document.querySelectorAll('.swiper-slide');
 

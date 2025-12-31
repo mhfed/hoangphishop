@@ -241,6 +241,16 @@ function hoangphi_render_hero_banner() {
 add_action( 'hoangphi_homepage_content', 'hoangphi_render_hero_banner', 10 );
 
 /**
+ * Component: Section Product Reels
+ * Hiển thị các video sản phẩm dạng Reel/Story với Swiper
+ */
+function hoangphi_render_reels_section() {
+    get_template_part( 'template-parts/section', 'reels' );
+}
+// Hook Reels Section sau Hero Banner (priority 15)
+add_action( 'hoangphi_homepage_content', 'hoangphi_render_reels_section', 15 );
+
+/**
  * Component: Section New Arrivals
  */
 function hoangphi_render_new_arrivals_section() {
@@ -441,3 +451,32 @@ function hoangphi_custom_checkout_fields( $fields ) {
 
     return $fields;
 }
+
+
+/**
+ * Tạo Custom Post Type cho Reels
+ */
+function hoangphi_register_reels_cpt() {
+    $labels = array(
+        'name'               => 'Reels',
+        'singular_name'      => 'Reel',
+        'menu_name'          => 'Quản lý Reels',
+        'add_new'            => 'Thêm Reel mới',
+        'add_new_item'       => 'Thêm Reel mới',
+        'edit_item'          => 'Chỉnh sửa Reel',
+        'all_items'          => 'Tất cả Reels',
+    );
+
+    $args = array(
+        'labels'             => $labels,
+        'public'             => true,
+        'has_archive'        => false,
+        'menu_icon'          => 'dashicons-video-alt3', // Icon máy quay phim
+        'supports'           => array('title'), // Chỉ cần tiêu đề để quản lý
+        'rewrite'            => array('slug' => 'reels'),
+        'show_in_rest'       => true,
+    );
+
+    register_post_type('reels', $args);
+}
+add_action('init', 'hoangphi_register_reels_cpt');

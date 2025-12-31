@@ -1,0 +1,102 @@
+/*
+Theme Name: Hoang Phi Luxury Theme
+Author: Your Name
+Description: Minimalist style like Biossance
+Version: 1.0
+*/
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Code CSS custom của bạn viết dưới này */
+
+/* Custom style mảnh mai cho font */
+body {
+  @apply font-body font-light antialiased;
+}
+/* Trong file CSS của bạn */
+.woocommerce-mini-cart__empty-message {
+  @apply text-center py-20 text-gray-400 text-xs uppercase tracking-widest font-light;
+}
+
+/* Style cho nút số lượng và nút mua hàng */
+.single-product .quantity input {
+  @apply border border-gray-200 rounded-full py-3 px-4 w-20 text-center mr-4 outline-none;
+}
+
+.single-product .single_add_to_cart_button {
+  @apply flex-1 bg-black text-white py-4 px-8 rounded-full text-[11px] uppercase tracking-[0.2em] font-bold hover:bg-gray-800 transition-all !important;
+}
+
+.single-product form.cart {
+  @apply flex items-center mt-6;
+}
+
+/* Ẩn các Breadcrumb mặc định xấu xí của WC nếu muốn */
+.woocommerce-breadcrumb {
+  @apply text-[10px] text-gray-400 !important;
+}
+.woocommerce-breadcrumb a {
+  @apply hover:text-black transition-colors;
+}
+
+/* Style Variation Form as Buttons */
+.single-product .variations {
+  @apply mb-6;
+}
+
+.single-product .variations tr {
+  @apply block mb-6;
+}
+
+.single-product .variations td {
+  @apply block p-0;
+}
+
+.single-product .variations .label {
+  @apply block mb-3 text-[11px] uppercase tracking-[0.2em] font-bold text-gray-900;
+}
+
+.single-product .variations .value {
+  @apply block;
+}
+
+/* Hide default dropdown */
+.single-product .variations select {
+  @apply hidden;
+}
+
+/* Style variation buttons */
+.single-product .variations .variation-buttons {
+  @apply flex flex-wrap gap-3;
+}
+
+.single-product .variations .variation-button {
+  @apply px-6 py-3 border-2 border-gray-200 rounded-full text-sm font-medium text-gray-700 bg-white hover:border-black transition-all cursor-pointer;
+}
+
+.single-product .variations .variation-button.selected {
+  @apply border-black bg-black text-white;
+}
+
+.single-product .variations .variation-button.disabled {
+  @apply opacity-50 cursor-not-allowed;
+}
+
+/* Reset button for variations */
+.single-product .reset_variations {
+  @apply text-[10px] uppercase tracking-widest text-gray-400 hover:text-black mt-3 inline-block;
+}
+
+.variation-chip.bg-black {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Hiệu ứng khi biến thể hết hàng (nếu bạn muốn nâng cao) */
+.variation-chip.out-of-stock {
+  text-decoration: line-through;
+  opacity: 0.5;
+  cursor: not-allowed;
+}

@@ -46,18 +46,26 @@ document.addEventListener('DOMContentLoaded', function () {
   // 3. Product Reels Swiper
   if (document.querySelector('.reelsSwiper')) {
     const reelsSwiper = new Swiper('.reelsSwiper', {
-      slidesPerView: 2.2,
+      slidesPerView: 2.2, // Mobile: Một nửa slide tiếp theo lộ ra để kích thích vuốt
       spaceBetween: 16,
       freeMode: true,
       loop: true,
+      grabCursor: true, // Hiệu ứng con trỏ kéo trên desktop
+      centeredSlides: false, // Không căn giữa slides
+      navigation: {
+        nextEl: '.reels-next',
+        prevEl: '.reels-prev',
+      },
       breakpoints: {
         768: {
           slidesPerView: 4.2,
           spaceBetween: 20,
+          centeredSlides: false,
         },
         1024: {
           slidesPerView: 6.2,
           spaceBetween: 24,
+          centeredSlides: false,
         },
       },
     });

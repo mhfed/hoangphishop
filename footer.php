@@ -146,11 +146,18 @@
 
             <!-- Footer với Total và Checkout -->
             <div class="p-6 border-t border-gray-100 space-y-4">
-                <div class="flex justify-between font-bold uppercase text-[12px] tracking-widest">
+                <div class="flex justify-between font-bold uppercase text-[12px] tracking-widest mb-2">
                     <span>Tổng cộng:</span>
                     <span id="cart-total"><?php echo WC()->cart->get_cart_total(); ?></span>
                 </div>
-                <a href="<?php echo esc_url( wc_get_checkout_url() ); ?>" class="block w-full bg-black text-white text-center py-4 text-[11px] font-bold uppercase tracking-[0.2em] hover:bg-[#7d6349] transition-colors">
+                
+                <!-- View Cart Link -->
+                <a href="<?php echo esc_url( wc_get_cart_url() ); ?>" class="block text-center text-[10px] font-bold uppercase tracking-widest border-b border-black pb-1 hover:opacity-70 transition-opacity">
+                    Xem giỏ hàng
+                </a>
+                
+                <!-- Checkout Button -->
+                <a href="<?php echo esc_url( wc_get_checkout_url() ); ?>" class="block w-full bg-black text-white text-center py-5 text-[11px] font-bold uppercase tracking-[0.2em] hover:bg-[#7d6349] transition-colors">
                     Thanh toán ngay
                 </a>
             </div>

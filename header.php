@@ -37,96 +37,102 @@
                             </a>
                             
                             <?php if ( $menu_type == 'mega_text' ) : ?>
-                                <!-- Mega Menu 3 cột: Category, Concern, Featured -->
-                                <div class="absolute left-1/2 -translate-x-1/2 top-full w-screen bg-white border-t border-gray-100 shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-[60]">
-                                    <div class="max-w-[1400px] mx-auto grid grid-cols-12 gap-8 p-12">
-                                        
-                                        <!-- Cột 1: Shop by Category (Dynamic từ WooCommerce) -->
-                                        <div class="col-span-3">
-                                            <h3 class="text-[12px] font-bold uppercase tracking-[0.1em] text-gray-900 mb-4 pb-3 border-b border-gray-200">SHOP BY CATEGORY</h3>
-                                            <ul class="space-y-4 mt-4">
-                                                <?php
-                                                $product_categories = get_terms( array(
-                                                    'taxonomy'   => 'product_cat',
-                                                    'hide_empty' => true,
-                                                    'number'     => 8,
-                                                    'orderby'    => 'count',
-                                                    'order'      => 'DESC',
-                                                ) );
+                                <!-- Mega Menu 3 cột: Lấy dữ liệu từ ACF Textarea -->
+                                <div class="fixed left-0 top-20 w-full bg-white border-t border-gray-100 shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-[60]">
+                                    <?php
+                                    // ID của trang cài đặt ACF - Thay số này bằng ID thực tế của trang cài đặt
+                                    $settings_id = 80; // TODO: Thay số này bằng ID thực tế của trang cài đặt
 
-                                                if ( ! empty( $product_categories ) && ! is_wp_error( $product_categories ) ) :
-                                                    foreach ( $product_categories as $category ) :
-                                                        $category_link = get_term_link( $category );
-                                                        ?>
-                                                        <li>
-                                                            <a href="<?php echo esc_url( $category_link ); ?>" class="text-[14px] text-gray-700 hover:text-[#7d6349] hover:font-semibold transition-all duration-200">
-                                                                <?php echo esc_html( $category->name ); ?>
-                                                            </a>
-                                                        </li>
-                                                        <?php
-                                                    endforeach;
-                                                else :
-                                                    // Fallback
+                                    // Lấy dữ liệu từ 3 field Textarea
+                                    $col_1_links = get_field( 'mega_col_1_links', $settings_id );
+                                    $col_2_links = get_field( 'mega_col_2_links', $settings_id );
+                                    $col_3_links = get_field( 'mega_col_3_links', $settings_id );
+
+                                    // Sử dụng explode để chia textarea thành mảng các dòng
+                                    $col_1_array = ! empty( $col_1_links ) ? explode( "\n", $col_1_links ) : array();
+                                    $col_2_array = ! empty( $col_2_links ) ? explode( "\n", $col_2_links ) : array();
+                                    $col_3_array = ! empty( $col_3_links ) ? explode( "\n", $col_3_links ) : array();
+
+                                    // Loại bỏ các dòng trống và trim whitespace
+                                    $col_1_array = array_filter( array_map( 'trim', $col_1_array ) );
+                                    $col_2_array = array_filter( array_map( 'trim', $col_2_array ) );
+                                    $col_3_array = array_filter( array_map( 'trim', $col_3_array ) );
+                                    ?>
+                                    <div class="max-w-[1400px] mx-auto px-6 py-10">
+                                        <div class="grid grid-cols-3 gap-12">
+                                        
+                                        <!-- Cột 1: Shop by Category -->
+                                        <div>
+                                            <h3 class="text-[11px] font-bold uppercase tracking-widest text-gray-400 pb-2 border-b mb-6">SHOP BY CATEGORY</h3>
+                                            <?php if ( ! empty( $col_1_array ) ) : ?>
+                                                <?php foreach ( $col_1_array as $link_text ) : ?>
+                                                    <?php
+                                                    // Parse link: Format có thể là "Text|URL" hoặc chỉ "Text" (dùng #)
+                                                    $link_parts = explode( '|', $link_text );
+                                                    $link_text_display = trim( $link_parts[0] );
+                                                    $link_url = isset( $link_parts[1] ) ? trim( $link_parts[1] ) : '#';
                                                     ?>
-                                                    <li><a href="#" class="text-[14px] text-gray-700 hover:text-[#7d6349] hover:font-semibold transition-all duration-200">Sữa rửa mặt (Cleansers)</a></li>
-                                                    <li><a href="#" class="text-[14px] text-gray-700 hover:text-[#7d6349] hover:font-semibold transition-all duration-200">Kem dưỡng (Moisturizers)</a></li>
-                                                    <li><a href="#" class="text-[14px] text-gray-700 hover:text-[#7d6349] hover:font-semibold transition-all duration-200">Tinh chất (Serums)</a></li>
-                                                    <li><a href="#" class="text-[14px] text-gray-700 hover:text-[#7d6349] hover:font-semibold transition-all duration-200">Kem chống nắng</a></li>
-                                                <?php endif; ?>
-                                            </ul>
+                                                    <a href="<?php echo esc_url( $link_url ); ?>" class="text-[13px] font-bold uppercase tracking-wider text-black hover:text-[#7d6349] block mb-4 transition-colors">
+                                                        <?php echo esc_html( $link_text_display ); ?>
+                                                    </a>
+                                                <?php endforeach; ?>
+                                            <?php else : ?>
+                                                <!-- Fallback nếu không có dữ liệu -->
+                                                <a href="#" class="text-[13px] font-bold uppercase tracking-wider text-black hover:text-[#7d6349] block mb-4 transition-colors">Sữa rửa mặt</a>
+                                                <a href="#" class="text-[13px] font-bold uppercase tracking-wider text-black hover:text-[#7d6349] block mb-4 transition-colors">Kem dưỡng</a>
+                                                <a href="#" class="text-[13px] font-bold uppercase tracking-wider text-black hover:text-[#7d6349] block mb-4 transition-colors">Tinh chất</a>
+                                            <?php endif; ?>
                                         </div>
 
                                         <!-- Cột 2: Shop by Concern -->
-                                        <div class="col-span-3 border-l border-gray-50 pl-8">
-                                            <h3 class="text-[12px] font-bold uppercase tracking-[0.1em] text-gray-900 mb-4 pb-3 border-b border-gray-200">SHOP BY CONCERN</h3>
-                                            <ul class="space-y-4 mt-4">
-                                                <li><a href="<?php echo esc_url( add_query_arg( 'filter', 'acne', wc_get_page_permalink( 'shop' ) ) ); ?>" class="text-[14px] text-gray-700 hover:text-[#7d6349] hover:font-semibold transition-all duration-200">Trị mụn & Lỗ chân lông</a></li>
-                                                <li><a href="<?php echo esc_url( add_query_arg( 'filter', 'anti-aging', wc_get_page_permalink( 'shop' ) ) ); ?>" class="text-[14px] text-gray-700 hover:text-[#7d6349] hover:font-semibold transition-all duration-200">Chống lão hóa</a></li>
-                                                <li><a href="<?php echo esc_url( add_query_arg( 'filter', 'brightening', wc_get_page_permalink( 'shop' ) ) ); ?>" class="text-[14px] text-gray-700 hover:text-[#7d6349] hover:font-semibold transition-all duration-200">Dưỡng sáng da</a></li>
-                                                <li><a href="<?php echo esc_url( add_query_arg( 'filter', 'hydration', wc_get_page_permalink( 'shop' ) ) ); ?>" class="text-[14px] text-gray-700 hover:text-[#7d6349] hover:font-semibold transition-all duration-200">Cấp ẩm sâu</a></li>
-                                            </ul>
+                                        <div>
+                                            <h3 class="text-[11px] font-bold uppercase tracking-widest text-gray-400 pb-2 border-b mb-6">SHOP BY CONCERN</h3>
+                                            <?php if ( ! empty( $col_2_array ) ) : ?>
+                                                <?php foreach ( $col_2_array as $link_text ) : ?>
+                                                    <?php
+                                                    $link_parts = explode( '|', $link_text );
+                                                    $link_text_display = trim( $link_parts[0] );
+                                                    $link_url = isset( $link_parts[1] ) ? trim( $link_parts[1] ) : '#';
+                                                    ?>
+                                                    <a href="<?php echo esc_url( $link_url ); ?>" class="text-[13px] font-bold uppercase tracking-wider text-black hover:text-[#7d6349] block mb-4 transition-colors">
+                                                        <?php echo esc_html( $link_text_display ); ?>
+                                                    </a>
+                                                <?php endforeach; ?>
+                                            <?php else : ?>
+                                                <!-- Fallback nếu không có dữ liệu -->
+                                                <a href="#" class="text-[13px] font-bold uppercase tracking-wider text-black hover:text-[#7d6349] block mb-4 transition-colors">Trị mụn</a>
+                                                <a href="#" class="text-[13px] font-bold uppercase tracking-wider text-black hover:text-[#7d6349] block mb-4 transition-colors">Chống lão hóa</a>
+                                                <a href="#" class="text-[13px] font-bold uppercase tracking-wider text-black hover:text-[#7d6349] block mb-4 transition-colors">Dưỡng sáng</a>
+                                            <?php endif; ?>
                                         </div>
 
-                                        <!-- Cột 3: Featured Image (ACF hoặc Fallback) -->
-                                        <div class="col-span-6 grid grid-cols-2 gap-4">
-                                            <?php
-                                            $settings_id = 80; // TODO: Thay bằng ID thực tế
-
-                                            $m_image = get_field( 'mega_menu_featured_image', $settings_id );
-                                            $m_title = get_field( 'mega_menu_featured_title', $settings_id );
-                                            $m_sub   = get_field( 'mega_menu_featured_subtitle', $settings_id );
-                                            $m_link  = get_field( 'mega_menu_featured_link', $settings_id );
-
-                                            $img_url = '';
-                                            if ( is_array( $m_image ) && isset( $m_image['url'] ) ) {
-                                                $img_url = $m_image['url'];
-                                            } elseif ( is_numeric( $m_image ) ) {
-                                                $img_url = wp_get_attachment_url( $m_image );
-                                            } elseif ( ! empty( $m_image ) ) {
-                                                $img_url = $m_image;
-                                            }
-
-                                            $mega_menu_image = ! empty( $img_url ) ? $img_url : 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=800&q=80';
-                                            $mega_menu_title = ! empty( $m_title ) ? $m_title : 'New Arrival';
-                                            $mega_menu_subtitle = ! empty( $m_sub ) ? $m_sub : 'Squalane + Vitamin C Rose Oil';
-                                            $mega_menu_link = ! empty( $m_link ) ? $m_link : '#';
-                                            ?>
-                                            <div class="relative overflow-hidden group/item h-full bg-[#f6f6f6] min-h-[300px]">
-                                                <img src="<?php echo esc_url( $mega_menu_image ); ?>" class="w-full h-full object-cover transition-transform duration-700 group-hover/item:scale-105" alt="<?php echo esc_attr( $mega_menu_title ); ?>">
-                                                <div class="absolute inset-0 bg-black/10 flex flex-col justify-end p-6">
-                                                    <span class="text-white text-[10px] font-bold uppercase tracking-widest mb-2"><?php echo esc_html( $mega_menu_title ); ?></span>
-                                                    <h4 class="text-white text-[18px] font-medium mb-4"><?php echo esc_html( $mega_menu_subtitle ); ?></h4>
-                                                    <a href="<?php echo esc_url( $mega_menu_link ); ?>" class="text-white text-[11px] font-bold uppercase border-b border-white w-fit hover:opacity-80 transition-opacity">Shop Now</a>
-                                                </div>
-                                            </div>
+                                        <!-- Cột 3: Featured -->
+                                        <div>
+                                            <h3 class="text-[11px] font-bold uppercase tracking-widest text-gray-400 pb-2 border-b mb-6">FEATURED</h3>
+                                            <?php if ( ! empty( $col_3_array ) ) : ?>
+                                                <?php foreach ( $col_3_array as $link_text ) : ?>
+                                                    <?php
+                                                    $link_parts = explode( '|', $link_text );
+                                                    $link_text_display = trim( $link_parts[0] );
+                                                    $link_url = isset( $link_parts[1] ) ? trim( $link_parts[1] ) : '#';
+                                                    ?>
+                                                    <a href="<?php echo esc_url( $link_url ); ?>" class="text-[13px] font-bold uppercase tracking-wider text-black hover:text-[#7d6349] block mb-4 transition-colors">
+                                                        <?php echo esc_html( $link_text_display ); ?>
+                                                    </a>
+                                                <?php endforeach; ?>
+                                            <?php else : ?>
+                                                <!-- Fallback nếu không có dữ liệu -->
+                                                <a href="#" class="text-[13px] font-bold uppercase tracking-wider text-black hover:text-[#7d6349] block mb-4 transition-colors">New Arrival</a>
+                                                <a href="#" class="text-[13px] font-bold uppercase tracking-wider text-black hover:text-[#7d6349] block mb-4 transition-colors">Best Seller</a>
+                                            <?php endif; ?>
                                         </div>
-
+                                        </div>
                                     </div>
                                 </div>
                             
                             <?php elseif ( $menu_type == 'mega_products' ) : ?>
                                 <!-- Mega Menu 5 cột: Product Cards -->
-                                <div class="absolute left-1/2 -translate-x-1/2 top-full w-screen bg-white border-t border-gray-100 shadow-sm opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-[60]">
+                                <div class="fixed left-0 top-20 w-full bg-white border-t border-gray-100 shadow-sm opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 z-[60]">
                                     <div class="max-w-[1400px] mx-auto p-10 grid grid-cols-5 gap-6">
                                         <?php
                                         $best_args = array(

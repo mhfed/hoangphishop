@@ -288,3 +288,12 @@ function hoangphi_register_acf_options_pages() {
         
     }
 }
+// Tạo lối tắt cho trang cấu hình ở menu trái
+add_action('admin_menu', function (){
+    add_menu_page('Mega Menu Settings', 'Mega Menu Settings', 'manage_options', 'post.php?post=75&action=edit', '', 'dashicons-admin-generic', 60);
+});
+
+// Tạo lối tắt cho trang cấu hình ở menu trái
+add_action('admin_menu', function (){
+    add_menu_page('Global Settings', 'Global Settings', 'manage_options', 'post.php?post=80&action=edit', '', 'dashicons-admin-generic', 60);
+});

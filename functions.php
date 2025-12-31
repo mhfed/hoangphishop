@@ -115,10 +115,15 @@ function hoangphi_force_load_wc_scripts() {
 add_action('wp_enqueue_scripts', 'hoangphi_force_load_wc_scripts');
 
 /**
- * Đảm bảo cart count được cập nhật trong fragments
+ * Đảm bảo cart count và cart total được cập nhật trong fragments
  */
 function hoangphi_add_cart_count_to_fragments($fragments) {
+    // Cập nhật cart count
     $fragments['.cart-contents-count'] = '<span class="cart-contents-count cart-count absolute -top-2 -right-2 bg-black text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center">' . WC()->cart->get_cart_contents_count() . '</span>';
+    
+    // Cập nhật cart total trong side cart
+    $fragments['#cart-total'] = WC()->cart->get_cart_total();
+    
     return $fragments;
 }
 add_filter('woocommerce_add_to_cart_fragments', 'hoangphi_add_cart_count_to_fragments');

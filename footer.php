@@ -123,25 +123,38 @@
         </p>
     </div>
 
-    <div id="side-cart-overlay"
-        class="fixed inset-0 bg-black/50 z-[60] hidden opacity-0 transition-opacity duration-500">
-    </div>
+    <!-- Side Cart Overlay -->
+    <div id="side-cart-overlay" class="fixed inset-0 bg-black/50 z-[100] opacity-0 invisible transition-all duration-500"></div>
+    
+    <!-- Side Cart -->
+    <div id="side-cart" class="fixed top-0 right-0 h-full w-full max-w-md bg-white z-[101] translate-x-full transition-transform duration-500 ease-in-out shadow-2xl">
+        <div class="flex flex-col h-full">
+            <!-- Header -->
+            <div class="p-6 border-b border-gray-100 flex items-center justify-between">
+                <h3 class="text-[13px] font-bold uppercase tracking-widest">Giỏ hàng của bạn</h3>
+                <button id="close-side-cart" class="text-gray-400 hover:text-black transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            
+            <!-- Cart Content -->
+            <div class="flex-grow overflow-y-auto p-6" id="mini-cart-content">
+                <?php woocommerce_mini_cart(); ?>
+            </div>
 
-    <div id="side-cart"
-        class="fixed top-0 right-0 h-full w-full max-w-[400px] bg-white z-[70] translate-x-full transition-transform duration-500 shadow-2xl flex flex-col">
-        <div class="p-6 border-b border-gray-100 flex justify-between items-center">
-            <h2 class="text-[13px] font-bold uppercase tracking-widest">Giỏ hàng của bạn</h2>
-            <button id="close-side-cart" class="text-gray-400 hover:text-black">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path d="M6 18L18 6M6 6l12 12"></path>
-                </svg>
-            </button>
+            <!-- Footer với Total và Checkout -->
+            <div class="p-6 border-t border-gray-100 space-y-4">
+                <div class="flex justify-between font-bold uppercase text-[12px] tracking-widest">
+                    <span>Tổng cộng:</span>
+                    <span id="cart-total"><?php echo WC()->cart->get_cart_total(); ?></span>
+                </div>
+                <a href="<?php echo esc_url( wc_get_checkout_url() ); ?>" class="block w-full bg-black text-white text-center py-4 text-[11px] font-bold uppercase tracking-[0.2em] hover:bg-[#7d6349] transition-colors">
+                    Thanh toán ngay
+                </a>
+            </div>
         </div>
-
-        <div class="flex-1 overflow-y-auto p-6 widget_shopping_cart_content">
-            <?php woocommerce_mini_cart(); ?>
-        </div>
-
     </div>
 
 

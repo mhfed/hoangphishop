@@ -102,6 +102,11 @@ jQuery(document).ready(function ($) {
         });
       }
 
+      // Cập nhật cart total nếu có trong response
+      if (response.cart_total) {
+        jQuery('#cart-total').html(response.cart_total);
+      }
+
       // Kích hoạt sự kiện để các script khác có thể lắng nghe
       $(document.body).trigger('added_to_cart', [
         response.fragments,
@@ -112,8 +117,10 @@ jQuery(document).ready(function ($) {
       // Trigger WooCommerce fragments refresh event
       $(document.body).trigger('wc_fragments_refreshed');
 
-      // Mở Side Cart
-      openSideCart();
+      // Mở Side Cart sau khi cập nhật fragments
+      setTimeout(function () {
+        openSideCart();
+      }, 100);
 
       $thisbutton.removeClass('loading opacity-50').addClass('added');
     });
@@ -121,13 +128,17 @@ jQuery(document).ready(function ($) {
 
   function openSideCart() {
     jQuery('#side-cart').removeClass('translate-x-full');
-    jQuery('#side-cart-overlay').removeClass('hidden').addClass('opacity-100');
+    jQuery('#side-cart-overlay')
+      .removeClass('opacity-0 invisible')
+      .addClass('opacity-100 visible');
     jQuery('body').addClass('overflow-hidden'); // Chặn scroll web
   }
 
   function closeSideCart() {
     jQuery('#side-cart').addClass('translate-x-full');
-    jQuery('#side-cart-overlay').addClass('opacity-0').addClass('hidden');
+    jQuery('#side-cart-overlay')
+      .removeClass('opacity-100 visible')
+      .addClass('opacity-0 invisible');
     jQuery('body').removeClass('overflow-hidden');
   }
 
@@ -142,9 +153,16 @@ jQuery(document).ready(function ($) {
     $('#close-side-cart, #side-cart-overlay').on('click', closeSideCart);
 
     // TỰ ĐỘNG MỞ KHI THÊM SẢN PHẨM THÀNH CÔNG
-    $(document.body).on('added_to_cart', function () {
-      openSideCart();
-    });
+    $(document.body).on(
+      'added_to_cart',
+      function (event, fragments, cart_hash, $button) {
+        // Fragments đã được cập nhật trong AJAX handler
+        // Chỉ cần mở side cart sau một chút delay để đảm bảo fragments đã render
+        setTimeout(function () {
+          openSideCart();
+        }, 100);
+      }
+    );
   });
 
   // 3. Product Gallery Thumbnail Click Handler

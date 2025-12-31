@@ -297,3 +297,35 @@ add_action('admin_menu', function (){
 add_action('admin_menu', function (){
     add_menu_page('Global Settings', 'Global Settings', 'manage_options', 'post.php?post=80&action=edit', '', 'dashicons-admin-generic', 60);
 });
+
+/**
+ * Ép WordPress ưu tiên tìm Sản phẩm khi search
+ * Đảm bảo khi khách search từ Overlay, WordPress sẽ tập trung tìm trong WooCommerce
+ */
+function hoangphi_search_filter( $query ) {
+    if ( $query->is_search() && ! is_admin() && $query->is_main_query() ) {
+        // Chỉ tìm trong 'product'
+        $query->set( 'post_type', array( 'product' ) );
+    }
+    return $query;
+}
+add_filter( 'pre_get_posts', 'hoangphi_search_filter' );
+
+/**
+ * Chặn tính năng tự động redirect đến sản phẩm duy nhất khi tìm kiếm
+ * Luôn hiển thị trang danh sách kết quả (search.php) ngay cả khi chỉ có 1 sản phẩm
+ */
+add_filter( 'woocommerce_redirect_single_search_result', '__return_false' );
+
+/**
+ * Ép WordPress sử dụng file search.php thay vì template của WooCommerce
+ */
+add_filter( 'template_include', function( $template ) {
+    if ( is_search() ) {
+        $search_template = locate_template( 'search.php' );
+        if ( $search_template ) {
+            return $search_template;
+        }
+    }
+    return $template;
+}, 99 );

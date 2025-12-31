@@ -1,7 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
-    './*.php', // Quét các file ở thư mục gốc theme
+    './**/*.php', // Quét tất cả file PHP trong theme
     './inc/**/*.php', // Quét thư mục inc (nếu có)
     './assets/**/*.js', // Quét JS
     './woocommerce/**/*.php', // THÊM DÒNG NÀY ĐỂ QUÉT FOLDER WOOCOMMERCE

@@ -242,3 +242,49 @@ function hoangphi_output_related_products() {
 }
 // Chèn vào cuối trang sản phẩm
 add_action( 'woocommerce_after_single_product', 'hoangphi_output_related_products', 20 );
+
+/**
+ * Register ACF Options Page cho Mega Menu (Optional)
+ * Nếu bạn muốn quản lý Featured Image trong Mega Menu từ Admin:
+ * 1. Tạo ACF Field Group với location "Options Page"
+ * 2. Thêm các fields: mega_menu_featured_image, mega_menu_featured_title, mega_menu_featured_subtitle, mega_menu_featured_link
+ * 3. Uncomment đoạn code dưới đây
+ */
+if ( function_exists( 'acf_add_options_page' ) ) {
+    acf_add_options_page( array(
+        'page_title' => 'Theme Options',
+        'menu_title' => 'Theme Options',
+        'menu_slug'  => 'theme-options',
+        'capability' => 'edit_posts',
+        'redirect'   => false,
+    ) );
+}
+// Register ACF Options Page
+// if( function_exists('acf_add_options_page') ) {
+//     acf_add_options_page(array(
+//         'page_title'    => 'Theme Options',
+//         'menu_title'    => 'Theme Options',
+//         'menu_slug'     => 'theme-options',
+//         'capability'    => 'edit_posts',
+//         'redirect'      => false
+//     ));
+// }
+/**
+ * Đăng ký ACF Options Page
+ */
+add_action('acf/init', 'hoangphi_register_acf_options_pages');
+function hoangphi_register_acf_options_pages() {
+    if( function_exists('acf_add_options_page') ) {
+        
+        acf_add_options_page(array(
+            'page_title'    => __('Theme General Settings', 'hoangphi'),
+            'menu_title'    => __('Theme Options', 'hoangphi'),
+            'menu_slug'     => 'theme-general-settings',
+            'capability'    => 'edit_posts',
+            'redirect'      => false,
+            'icon_url'      => 'dashicons-admin-generic', // Icon bánh răng
+            'position'      => 60 // Vị trí dưới mục Appearance
+        ));
+        
+    }
+}

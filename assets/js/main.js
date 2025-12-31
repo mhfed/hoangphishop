@@ -262,6 +262,58 @@ jQuery(document).ready(function ($) {
   });
 });
 
+// Search Overlay Handler
+document.addEventListener('DOMContentLoaded', function () {
+  const searchOverlay = document.getElementById('search-overlay');
+  const openSearchBtn = document.getElementById('open-search');
+  const closeSearchBtn = document.getElementById('close-search');
+  const searchInput = document.getElementById('search-input');
+
+  if (openSearchBtn && searchOverlay) {
+    // Mở tìm kiếm
+    openSearchBtn.addEventListener('click', function (e) {
+      e.preventDefault();
+      searchOverlay.classList.remove(
+        'opacity-0',
+        'invisible',
+        'pointer-events-none'
+      );
+      // Tự động focus chuột vào ô nhập
+      setTimeout(() => {
+        if (searchInput) {
+          searchInput.focus();
+        }
+      }, 300);
+      // Chặn cuộn trang web bên dưới
+      document.body.style.overflow = 'hidden';
+    });
+
+    // Đóng tìm kiếm
+    if (closeSearchBtn) {
+      closeSearchBtn.addEventListener('click', function () {
+        searchOverlay.classList.add(
+          'opacity-0',
+          'invisible',
+          'pointer-events-none'
+        );
+        document.body.style.overflow = 'auto';
+      });
+    }
+
+    // Nhấn phím ESC để đóng
+    document.addEventListener('keydown', function (e) {
+      if (
+        e.key === 'Escape' &&
+        !searchOverlay.classList.contains('invisible')
+      ) {
+        if (closeSearchBtn) {
+          closeSearchBtn.click();
+        }
+      }
+    });
+  }
+});
+
 // (function ($) {
 // $(document).ready(function () {
 // // Sử dụng delegated event để chắc chắn bắt được nút trong Swiper

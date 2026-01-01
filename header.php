@@ -71,7 +71,7 @@
                                         
                                         <!-- Cột 1: Shop by Category -->
                                         <div>
-                                            <h3 class="text-[11px] font-bold uppercase tracking-widest text-gray-400 pb-2 border-b mb-6">SHOP BY CATEGORY</h3>
+                                            <h3 class="text-[11px] font-bold uppercase tracking-widest text-gray-400 pb-2 border-b mb-6">DANH MỤC SẢN PHẨM</h3>
                                             <?php if ( ! empty( $col_1_array ) ) : ?>
                                                 <?php foreach ( $col_1_array as $link_text ) : ?>
                                                     <?php
@@ -94,7 +94,7 @@
 
                                         <!-- Cột 2: Shop by Concern -->
                                         <div>
-                                            <h3 class="text-[11px] font-bold uppercase tracking-widest text-gray-400 pb-2 border-b mb-6">SHOP BY CONCERN</h3>
+                                            <h3 class="text-[11px] font-bold uppercase tracking-widest text-gray-400 pb-2 border-b mb-6">GIẢI PHÁP CHO DA</h3>
                                             <?php if ( ! empty( $col_2_array ) ) : ?>
                                                 <?php foreach ( $col_2_array as $link_text ) : ?>
                                                     <?php
@@ -116,7 +116,7 @@
 
                                         <!-- Cột 3: Featured -->
                                         <div>
-                                            <h3 class="text-[11px] font-bold uppercase tracking-widest text-gray-400 pb-2 border-b mb-6">FEATURED</h3>
+                                            <h3 class="text-[11px] font-bold uppercase tracking-widest text-gray-400 pb-2 border-b mb-6">NỔI BẬT</h3>
                                             <?php if ( ! empty( $col_3_array ) ) : ?>
                                                 <?php foreach ( $col_3_array as $link_text ) : ?>
                                                     <?php

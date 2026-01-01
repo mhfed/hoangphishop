@@ -75,9 +75,9 @@
 
                                         // Hiển thị 3 cột xếp chồng (mobile)
                                         $all_columns = array(
-                                            array( 'title' => 'SHOP BY CATEGORY', 'links' => $col_1_array ),
-                                            array( 'title' => 'SHOP BY CONCERN', 'links' => $col_2_array ),
-                                            array( 'title' => 'FEATURED', 'links' => $col_3_array ),
+                                            array( 'title' => 'DANH MỤC SẢN PHẨM', 'links' => $col_1_array ),
+                                            array( 'title' => 'GIẢI PHÁP CHO DA', 'links' => $col_2_array ),
+                                            array( 'title' => 'NỔI BẬT', 'links' => $col_3_array ),
                                         );
                                         ?>
                                         <?php foreach ( $all_columns as $column ) : 

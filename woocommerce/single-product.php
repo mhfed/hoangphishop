@@ -128,7 +128,7 @@ if ( post_password_required() ) {
                         <?php the_excerpt(); ?>
                     </div>
                     
-                    <!-- Add to Cart Form -->
+                    <!-- Form thêm vào giỏ hàng -->
                     <div class="product-action-area pt-6 border-t border-gray-100">
                         <?php woocommerce_template_single_add_to_cart(); ?>
                     </div>
@@ -142,7 +142,7 @@ if ( post_password_required() ) {
                         ?>
                             <details class="group border-b border-gray-100 pb-4 cursor-pointer" open>
                                 <summary class="flex justify-between items-center list-none text-[11px] uppercase tracking-[0.2em] font-bold cursor-pointer">
-                                    Thành phần chính
+                                    THÀNH PHẦN
                                     <span class="group-open:rotate-180 transition-transform duration-300">↓</span>
                                 </summary>
                                 <div class="pt-4 text-sm text-gray-500 font-light leading-relaxed">
@@ -158,7 +158,7 @@ if ( post_password_required() ) {
                         ?>
                             <details class="group border-b border-gray-100 pb-4 cursor-pointer">
                                 <summary class="flex justify-between items-center list-none text-[11px] uppercase tracking-[0.2em] font-bold cursor-pointer">
-                                    Cách sử dụng
+                                    HƯỚNG DẪN SỬ DỤNG
                                     <span class="group-open:rotate-180 transition-transform duration-300">↓</span>
                                 </summary>
                                 <div class="pt-4 text-sm text-gray-500 font-light leading-relaxed">
@@ -174,7 +174,7 @@ if ( post_password_required() ) {
                         ?>
                             <details class="group border-b border-gray-100 pb-4 cursor-pointer">
                                 <summary class="flex justify-between items-center list-none text-[11px] uppercase tracking-[0.2em] font-bold cursor-pointer">
-                                    Kết quả lâm sàng
+                                    KẾT QUẢ LÂM SÀNG
                                     <span class="group-open:rotate-180 transition-transform duration-300">↓</span>
                                 </summary>
                                 <div class="pt-4 text-sm text-gray-500 font-light leading-relaxed">

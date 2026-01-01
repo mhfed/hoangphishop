@@ -480,3 +480,23 @@ function hoangphi_register_reels_cpt() {
     register_post_type('reels', $args);
 }
 add_action('init', 'hoangphi_register_reels_cpt');
+
+/**
+ * Dịch các text WooCommerce sang tiếng Việt theo phong cách Luxury
+ */
+// Dịch nút "Add to cart"
+add_filter('woocommerce_product_single_add_to_cart_text', function($text) {
+    return 'THÊM VÀO GIỎ HÀNG';
+});
+
+add_filter('woocommerce_product_add_to_cart_text', function($text) {
+    return 'THÊM VÀO GIỎ HÀNG';
+});
+
+// Dịch "View Cart"
+add_filter('woocommerce_product_add_to_cart_text', function($text) {
+    if (is_cart()) {
+        return 'XEM GIỎ HÀNG';
+    }
+    return $text;
+}, 20);

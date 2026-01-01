@@ -799,6 +799,58 @@ function hoangphi_checkout_custom_styles() {
 add_action('wp_head', 'hoangphi_checkout_custom_styles');
 
 /**
+ * CSS cho trang Thank You Page - VietQR và ẩn thông tin ngân hàng mặc định
+ */
+function hoangphi_thankyou_page_styles() {
+    if ( is_wc_endpoint_url( 'order-received' ) || is_order_received_page() ) {
+        ?>
+        <style>
+            /* Đồng bộ Font chữ & Màu sắc cho khối QR */
+            .vietqr-payment-wrapper {
+                font-family: 'Inter', sans-serif; /* Sử dụng font Inter của theme */
+            }
+            
+            .vietqr-payment-wrapper h3.vietqr-title {
+                font-family: 'Inter', sans-serif;
+                font-weight: 300;
+                color: #1a1a1a;
+                border-bottom: 1px solid #eee;
+                padding-bottom: 15px;
+                display: inline-block;
+                font-size: 13px;
+                text-transform: uppercase;
+                letter-spacing: 2px;
+                margin-bottom: 20px;
+            }
+            
+            .vietqr-payment-wrapper .qr-container {
+                transition: transform 0.3s ease;
+            }
+            
+            .vietqr-payment-wrapper .qr-container:hover {
+                transform: translateY(-5px); /* Hiệu ứng nổi nhẹ khi di chuột vào */
+            }
+            
+            /* Nút Zalo hover effect */
+            .zalo-confirm-btn:hover {
+                background-color: #0052CC !important;
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(0, 104, 255, 0.3);
+            }
+            
+            /* Ẩn phần danh sách chi tiết ngân hàng mặc định của WooCommerce */
+            .woocommerce-order ul.wc-bacs-bank-details,
+            .woocommerce-order .woocommerce-bacs-bank-details,
+            .woocommerce-thankyou-order-details ul.wc-bacs-bank-details {
+                display: none !important;
+            }
+        </style>
+        <?php
+    }
+}
+add_action('wp_head', 'hoangphi_thankyou_page_styles');
+
+/**
  * Ép WooCommerce sử dụng template checkout từ theme
  */
 add_filter( 'woocommerce_locate_template', 'hoangphi_force_checkout_template', 10, 3 );
@@ -897,13 +949,28 @@ function hoangphi_display_vietqr_from_settings( $order_id ) {
         );
         
         // 4. Hiển thị ra giao diện Luxury
+        // Lấy số điện thoại Zalo từ settings (hoặc hard-code nếu cần)
+        $zalo_phone = '0123456789'; // Thay bằng số điện thoại Zalo của bạn (bỏ số 0 đầu, ví dụ: 123456789)
+        $zalo_message = urlencode( 'Xin chào, tôi đã thanh toán đơn hàng #' . $order_id . '. Vui lòng xác nhận.' );
+        $zalo_url = 'https://zalo.me/' . $zalo_phone . '?message=' . $zalo_message;
         ?>
-        <div class="vietqr-payment-wrapper" style="margin: 40px 0; text-align: center; font-family: sans-serif;">
+        <div class="vietqr-payment-wrapper" style="margin: 40px 0; text-align: center;">
             <div style="background: #fff; border: 1px solid #f2f2f2; padding: 30px; display: inline-block; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
-                <h3 style="font-size: 13px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px; color: #888;">Quét mã để thanh toán</h3>
-                <img src="<?php echo esc_url( $qr_url ); ?>" style="max-width: 280px; height: auto; margin-bottom: 15px; border-radius: 8px;" alt="Mã QR thanh toán" />
+                <h3 class="vietqr-title">Quét mã để thanh toán</h3>
+                <div class="qr-container">
+                    <img src="<?php echo esc_url( $qr_url ); ?>" style="max-width: 280px; height: auto; margin-bottom: 15px; border-radius: 8px;" alt="Mã QR thanh toán" />
+                </div>
                 <p style="font-size: 15px; font-weight: 600; margin: 5px 0;">Nội dung: <span style="color: #000;"><?php echo esc_html( $memo ); ?></span></p>
                 <p style="font-size: 12px; color: #999; margin-top: 10px;">Chủ TK: <?php echo esc_html( $account_name ); ?></p>
+                
+                <!-- Nút Xác nhận qua Zalo -->
+                <a href="<?php echo esc_url( $zalo_url ); ?>" 
+                   target="_blank" 
+                   class="zalo-confirm-btn"
+                   style="display: inline-block; margin-top: 20px; padding: 12px 24px; background-color: #0068FF; color: #fff; text-decoration: none; border-radius: 8px; font-size: 13px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; transition: all 0.3s ease;">
+                    <span style="margin-right: 8px;">💬</span>
+                    Xác nhận qua Zalo
+                </a>
             </div>
         </div>
         <?php

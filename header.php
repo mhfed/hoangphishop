@@ -222,12 +222,30 @@
             <?php endif; ?>
         </nav>
 
-        <!-- Icons bên phải (Search, Cart) -->
+        <!-- Icons bên phải (Search, Account, Cart) -->
         <div class="flex items-center space-x-6">
             <button id="open-search" class="hover:opacity-60 transition"><svg class="w-5 h-5" fill="none" stroke="currentColor"
                     viewBox="0 0 24 24">
                     <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                 </svg></button>
+            
+            <!-- Account Link với Dropdown -->
+            <div class="account-link relative group">
+                <a href="<?php echo get_permalink( get_option('woocommerce_myaccount_page_id') ); ?>" class="hover:text-gray-400">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                    </svg>
+                </a>
+                <div class="absolute right-0 hidden group-hover:block bg-white shadow-xl border p-4 w-40 z-50">
+                    <?php if ( is_user_logged_in() ) : ?>
+                        <a href="<?php echo wp_logout_url( get_permalink() ); ?>" class="block text-xs uppercase tracking-widest">Đăng xuất</a>
+                    <?php else : ?>
+                        <a href="<?php echo get_permalink( get_option('woocommerce_myaccount_page_id') ); ?>" class="block text-xs uppercase tracking-widest mb-2">Đăng nhập</a>
+                        <a href="<?php echo get_permalink( get_option('woocommerce_myaccount_page_id') ); ?>" class="block text-xs uppercase tracking-widest">Đăng ký</a>
+                    <?php endif; ?>
+                </div>
+            </div>
+
             <div class="header-cart-wrapper">
                 <a class="cart-contents relative group" href="<?php echo wc_get_cart_url(); ?>">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

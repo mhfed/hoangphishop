@@ -8,13 +8,13 @@
  */
 ?>
 
-<section class="reels-section py-20 bg-white overflow-hidden min-h-[400px]">
+<section class="reels-section py-20 bg-white overflow-hidden h-fit">
     <div class="px-6 mb-12 text-center">
         <h2 class="text-2xl md:text-3xl font-light tracking-[0.3em] uppercase text-gray-900">The Reel Experience</h2>
     </div>
 
     <div class="relative">
-        <div class="swiper reelsSwiper px-6 overflow-hidden" style="min-height: 400px;">
+        <div class="swiper reelsSwiper px-6 overflow-hidden">
             <div class="swiper-wrapper h-fit">
                 <?php
                 // Lấy các bài viết từ custom post type 'reels'

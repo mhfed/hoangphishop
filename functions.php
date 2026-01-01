@@ -31,6 +31,12 @@ function hoangphi_assets() {
 add_action('wp_enqueue_scripts', 'hoangphi_assets');
 
 /**
+ * Loại bỏ hoàn toàn CSS mặc định của WooCommerce
+ * Để sử dụng Tailwind CSS thay thế
+ */
+add_filter( 'woocommerce_enqueue_styles', '__return_empty_array' );
+
+/**
  * Thiết lập các tính năng hỗ trợ Theme
  */
 function hoangphi_theme_setup() {
@@ -45,8 +51,8 @@ function hoangphi_theme_setup() {
 
     // Đăng ký menu để quản lý trong Admin
     register_nav_menus(array(
-        'primary' => 'Main Menu',
-        'footer'  => 'Footer Menu',
+        'primary' => __( 'Primary Menu', 'hoangphi' ),
+        'footer'  => __( 'Footer Menu', 'hoangphi' ),
     ));
 }
 add_action('after_setup_theme', 'hoangphi_theme_setup');
@@ -849,6 +855,199 @@ function hoangphi_thankyou_page_styles() {
     }
 }
 add_action('wp_head', 'hoangphi_thankyou_page_styles');
+
+/**
+ * CSS tối ưu cho trang My Account - Luxury Style
+ * Style cho cả trang đăng nhập và trang dashboard khi đã đăng nhập
+ */
+function hoangphi_myaccount_custom_styles() {
+    if ( is_account_page() ) {
+        ?>
+        <style>
+            /* Layout chính cho My Account - 2 cột: Navigation trái, Content phải */
+            .woocommerce-account {
+                max-width: 1400px;
+                margin: 0 auto;
+                padding: 60px 20px;
+            }
+            
+            .woocommerce-account .woocommerce-MyAccount-navigation {
+                width: 250px;
+                float: left;
+                margin-right: 60px;
+            }
+            
+            .woocommerce-account .woocommerce-MyAccount-content {
+                overflow: hidden;
+                min-height: 400px;
+            }
+            
+            @media (max-width: 1024px) {
+                .woocommerce-account .woocommerce-MyAccount-navigation {
+                    width: 100%;
+                    float: none;
+                    margin-right: 0;
+                    margin-bottom: 40px;
+                }
+            }
+            
+            /* Layout Grid 50/50 cho form Đăng nhập và Đăng ký (khi chưa đăng nhập) */
+            .woocommerce-account .woocommerce-MyAccount-content .u-columns {
+                display: grid !important;
+                grid-template-columns: 1fr 1fr !important;
+                gap: 40px !important;
+                margin: 0 !important;
+            }
+            
+            @media (max-width: 768px) {
+                .woocommerce-account .woocommerce-MyAccount-content .u-columns {
+                    grid-template-columns: 1fr !important;
+                }
+            }
+            
+            /* Style cho form Đăng nhập */
+            .woocommerce-account .woocommerce-MyAccount-content .u-column1,
+            .woocommerce-account .woocommerce-MyAccount-content .u-column2 {
+                background: #fff;
+                border: 1px solid #e5e5e5;
+                padding: 30px;
+                border-radius: 0;
+            }
+            
+            .woocommerce-account .woocommerce-MyAccount-content h2 {
+                font-size: 13px;
+                text-transform: uppercase;
+                letter-spacing: 0.2em;
+                font-weight: 700;
+                margin-bottom: 20px;
+                color: #1a1a1a;
+            }
+            
+            /* Style cho input fields */
+            .woocommerce-account .woocommerce-MyAccount-content input[type="text"],
+            .woocommerce-account .woocommerce-MyAccount-content input[type="email"],
+            .woocommerce-account .woocommerce-MyAccount-content input[type="password"],
+            .woocommerce-account .woocommerce-MyAccount-content textarea {
+                width: 100%;
+                padding: 12px 16px;
+                border: 1px solid #e5e5e5;
+                border-radius: 0;
+                font-size: 14px;
+                font-weight: 300;
+                margin-bottom: 15px;
+            }
+            
+            .woocommerce-account .woocommerce-MyAccount-content input[type="text"]:focus,
+            .woocommerce-account .woocommerce-MyAccount-content input[type="email"]:focus,
+            .woocommerce-account .woocommerce-MyAccount-content input[type="password"]:focus,
+            .woocommerce-account .woocommerce-MyAccount-content textarea:focus {
+                border-color: #000;
+                outline: none;
+            }
+            
+            /* Style cho labels */
+            .woocommerce-account .woocommerce-MyAccount-content label {
+                font-size: 11px;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.1em;
+                margin-bottom: 8px;
+                color: #1a1a1a;
+                display: block;
+            }
+            
+            /* Style cho nút Submit */
+            .woocommerce-account .woocommerce-MyAccount-content .woocommerce-form-login__submit,
+            .woocommerce-account .woocommerce-MyAccount-content .woocommerce-form-register__submit,
+            .woocommerce-account .woocommerce-MyAccount-content button[type="submit"] {
+                background-color: #000;
+                color: #fff;
+                padding: 16px 32px;
+                text-transform: uppercase;
+                letter-spacing: 0.2em;
+                font-weight: 700;
+                border-radius: 0;
+                border: none;
+                font-size: 11px;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                width: 100%;
+            }
+            
+            .woocommerce-account .woocommerce-MyAccount-content .woocommerce-form-login__submit:hover,
+            .woocommerce-account .woocommerce-MyAccount-content .woocommerce-form-register__submit:hover,
+            .woocommerce-account .woocommerce-MyAccount-content button[type="submit"]:hover {
+                background-color: #333;
+            }
+            
+            /* Ẩn các link thừa */
+            .woocommerce-account .woocommerce-MyAccount-content .lost_password,
+            .woocommerce-account .woocommerce-MyAccount-content .woocommerce-form-login__rememberme {
+                display: none;
+            }
+            
+            /* Style Error Messages với Tailwind - Nền đỏ nhạt, chữ đỏ đậm */
+            .woocommerce-error,
+            .woocommerce-info,
+            .woocommerce-message {
+                background-color: #fef2f2 !important;
+                border: 1px solid #fecaca !important;
+                color: #991b1b !important;
+                padding: 16px !important;
+                margin-bottom: 20px !important;
+                border-radius: 0 !important;
+                font-size: 13px !important;
+                font-weight: 300 !important;
+            }
+            
+            .woocommerce-error::before,
+            .woocommerce-info::before,
+            .woocommerce-message::before {
+                display: none !important;
+            }
+            
+            .woocommerce-message {
+                background-color: #f0fdf4 !important;
+                border-color: #bbf7d0 !important;
+                color: #166534 !important;
+            }
+            
+            /* Clear floats */
+            .woocommerce-account::after {
+                content: "";
+                display: table;
+                clear: both;
+            }
+        </style>
+        <?php
+    }
+}
+add_action('wp_head', 'hoangphi_myaccount_custom_styles');
+
+/**
+ * CSS để ẩn mobile menu overlay trên desktop
+ */
+function hoangphi_hide_mobile_overlay_desktop() {
+    ?>
+    <style>
+        /* Ẩn mobile menu overlay trên desktop */
+        @media (min-width: 1024px) {
+            #mobile-menu-overlay {
+                display: none !important;
+            }
+            
+            #mobile-menu {
+                pointer-events: none !important;
+            }
+            
+            #mobile-menu-content {
+                pointer-events: none !important;
+            }
+        }
+    </style>
+    <?php
+}
+add_action('wp_head', 'hoangphi_hide_mobile_overlay_desktop');
 
 /**
  * Ép WooCommerce sử dụng template checkout từ theme

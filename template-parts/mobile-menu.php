@@ -7,7 +7,7 @@
 ?>
 
 <div id="mobile-menu" class="fixed inset-0 z-[99] pointer-events-none">
-    <div id="mobile-menu-overlay" class="absolute top-20 left-0 right-0 bottom-0 bg-black/40 opacity-0 transition-opacity duration-500 pointer-events-auto"></div>
+    <div id="mobile-menu-overlay" class="absolute top-20 left-0 right-0 bottom-0 bg-black/40 opacity-0 transition-opacity duration-500 pointer-events-auto lg:hidden"></div>
     
     <div id="mobile-menu-content" class="absolute top-0 right-0 w-[85%] max-w-[400px] h-full bg-white shadow-2xl translate-x-full transition-transform duration-500 ease-in-out pointer-events-auto flex flex-col min-h-[100vh] open-mobile-menu">
         

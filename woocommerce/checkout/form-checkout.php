@@ -25,7 +25,6 @@ if ( ! $checkout->is_registration_enabled() && $checkout->is_registration_requir
 
 <div class="checkout-page py-20 bg-white">
     <div class="max-w-[1400px] mx-auto px-6">
-        <h1 class="text-3xl md:text-4xl font-light uppercase tracking-widest mb-12 text-center">Thanh toán</h1>
 
         <form name="checkout" method="post" class="checkout woocommerce-checkout" action="<?php echo esc_url( wc_get_checkout_url() ); ?>" enctype="multipart/form-data" aria-label="<?php echo esc_attr__( 'Checkout', 'woocommerce' ); ?>">
 
@@ -33,9 +32,9 @@ if ( ! $checkout->is_registration_enabled() && $checkout->is_registration_requir
 
                 <?php do_action( 'woocommerce_checkout_before_customer_details' ); ?>
 
-                <div class="grid grid-cols-1 lg:grid-cols-12 gap-16">
-                    <!-- Cột trái: Thông tin thanh toán (7/12) -->
-                    <div class="lg:col-span-7">
+                <div class="grid grid-cols-1 lg:grid-cols-[60%_40%] gap-16">
+                    <!-- Cột trái: Thông tin thanh toán (60%) -->
+                    <div>
                         <h2 class="text-[13px] font-bold uppercase tracking-[0.3em] text-gray-400 mb-8">Thông tin thanh toán</h2>
                         <div id="customer_details">
                             <?php do_action( 'woocommerce_checkout_billing' ); ?>
@@ -43,8 +42,8 @@ if ( ! $checkout->is_registration_enabled() && $checkout->is_registration_requir
                         </div>
                     </div>
 
-                    <!-- Cột phải: Tóm tắt đơn hàng (5/12) - Sticky -->
-                    <div class="lg:col-span-5">
+                    <!-- Cột phải: Tóm tắt đơn hàng (40%) - Sticky -->
+                    <div>
                         <div class="bg-[#f9f9f9] p-8 sticky top-24">
                             <h3 class="text-[13px] font-bold uppercase tracking-[0.3em] text-gray-400 mb-6">
                                 Đơn hàng của bạn

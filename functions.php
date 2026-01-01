@@ -476,11 +476,11 @@ function hoangphi_custom_checkout_fields( $fields ) {
     $fields['billing']['billing_email']['label'] = '';
     $fields['billing']['billing_address_1']['label'] = '';
 
-    // Đổi placeholder cho thân thiện
+    // Đổi placeholder cho thân thiện và sang hơn
     $fields['billing']['billing_first_name']['placeholder'] = 'HỌ VÀ TÊN';
-    $fields['billing']['billing_phone']['placeholder'] = 'SỐ ĐIỆN THOẠI';
+    $fields['billing']['billing_phone']['placeholder'] = 'Số điện thoại để liên hệ giao hàng';
     $fields['billing']['billing_email']['placeholder'] = 'ĐỊA CHỈ EMAIL';
-    $fields['billing']['billing_address_1']['placeholder'] = 'ĐỊA CHỈ GIAO HÀNG';
+    $fields['billing']['billing_address_1']['placeholder'] = 'Số nhà, tên đường...';
 
     // Sắp xếp lại thứ tự: Tên -> Số điện thoại -> Email -> Địa chỉ
     $fields['billing']['billing_first_name']['priority'] = 10;
@@ -539,3 +539,373 @@ add_filter('woocommerce_product_add_to_cart_text', function($text) {
     }
     return $text;
 }, 20);
+
+/**
+ * Tối ưu CSS cho trang Checkout - Luxury Biossance Style
+ */
+function hoangphi_checkout_custom_styles() {
+    if (is_checkout()) {
+        ?>
+        <style>
+            /* Checkout Luxury Styling - Form Row và Label */
+            .woocommerce-checkout .form-row {
+                margin-bottom: 20px;
+            }
+            
+            .woocommerce-checkout label {
+                display: block;
+                font-size: 11px;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.1em;
+                margin-bottom: 8px;
+                color: #1a1a1a;
+            }
+            
+            /* Input Styling - Bỏ style mặc định của trình duyệt cho Select */
+            .woocommerce-checkout select,
+            .woocommerce-checkout select#billing_state,
+            .woocommerce-checkout select#billing_city,
+            .woocommerce-checkout select#billing_district,
+            .woocommerce-checkout select#shipping_state,
+            .woocommerce-checkout select#shipping_city,
+            .woocommerce-checkout select#shipping_district {
+                appearance: none;
+                -webkit-appearance: none;
+                -moz-appearance: none;
+                background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23333' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+                background-repeat: no-repeat;
+                background-position: right 12px center;
+                background-size: 12px;
+                border: 1px solid #e5e7eb;
+                border-radius: 0;
+                font-size: 13px;
+                font-weight: 300;
+                padding: 12px 36px 12px 12px;
+                width: 100%;
+                color: #111;
+                background-color: #fff;
+                transition: border-color 0.2s ease;
+            }
+            
+            .woocommerce-checkout select:focus {
+                outline: none;
+                border-color: #7d6349;
+            }
+            
+            /* Gom nhóm Tỉnh/Thành và Quận/Huyện trên cùng 1 hàng - Dùng Grid/Flex */
+            @media (min-width: 768px) {
+                /* Tạo grid container cho các field Tỉnh/Thành và Quận/Huyện */
+                .woocommerce-checkout #billing_state_field.form-row-first,
+                .woocommerce-checkout #billing_city_field.form-row-first,
+                .woocommerce-checkout #billing_district_field.form-row-first,
+                .woocommerce-checkout #shipping_state_field.form-row-first,
+                .woocommerce-checkout #shipping_city_field.form-row-first,
+                .woocommerce-checkout #shipping_district_field.form-row-first {
+                    width: 48% !important;
+                    display: inline-block !important;
+                    float: left !important;
+                    margin-right: 4% !important;
+                    clear: none !important;
+                    vertical-align: top;
+                }
+                
+                .woocommerce-checkout #billing_state_field.form-row-last,
+                .woocommerce-checkout #billing_city_field.form-row-last,
+                .woocommerce-checkout #billing_district_field.form-row-last,
+                .woocommerce-checkout #shipping_state_field.form-row-last,
+                .woocommerce-checkout #shipping_city_field.form-row-last,
+                .woocommerce-checkout #shipping_district_field.form-row-last {
+                    width: 48% !important;
+                    display: inline-block !important;
+                    float: right !important;
+                    margin-right: 0 !important;
+                    clear: none !important;
+                    vertical-align: top;
+                }
+                
+                /* Đảm bảo các field sau cặp Tỉnh/Thành - Quận/Huyện xuống dòng mới */
+                .woocommerce-checkout #billing_state_field.form-row-first + .form-row:not(.form-row-last),
+                .woocommerce-checkout #billing_city_field.form-row-first + .form-row:not(.form-row-last),
+                .woocommerce-checkout #billing_district_field.form-row-first + .form-row:not(.form-row-last),
+                .woocommerce-checkout #shipping_state_field.form-row-first + .form-row:not(.form-row-last),
+                .woocommerce-checkout #shipping_city_field.form-row-first + .form-row:not(.form-row-last),
+                .woocommerce-checkout #shipping_district_field.form-row-first + .form-row:not(.form-row-last) {
+                    clear: both !important;
+                }
+                
+                /* Ép các address field hiển thị đúng */
+                .woocommerce-checkout .address-field.validate-required {
+                    display: block !important;
+                }
+            }
+            
+            /* Custom nút #place_order - The Final Touch */
+            .woocommerce-checkout #place_order {
+                background-color: #000 !important;
+                color: #fff !important;
+                padding: 20px !important;
+                text-transform: uppercase !important;
+                letter-spacing: 0.2em !important;
+                font-weight: 700 !important;
+                border-radius: 0px !important;
+                width: 100% !important;
+                transition: all 0.3s ease !important;
+                margin-top: 20px;
+                border: none !important;
+                font-size: 11px;
+                cursor: pointer;
+            }
+            
+            .woocommerce-checkout #place_order:hover {
+                background-color: #333 !important;
+                letter-spacing: 0.3em !important;
+            }
+            
+            .woocommerce-checkout #place_order:active {
+                transform: translateY(1px);
+            }
+            
+            /* Tối ưu cột "Đơn hàng của bạn" (Order Review) */
+            .woocommerce-checkout #order_review {
+                border: none !important;
+            }
+            
+            .woocommerce-checkout #order_review table {
+                border: none !important;
+                width: 100%;
+            }
+            
+            .woocommerce-checkout #order_review table th,
+            .woocommerce-checkout #order_review table td {
+                border: none !important;
+                padding: 12px 0;
+                vertical-align: top;
+            }
+            
+            .woocommerce-checkout #order_review .product-name {
+                font-size: 13px;
+                text-transform: uppercase;
+                font-weight: 500;
+            }
+            
+            .woocommerce-checkout #order_review .order-total {
+                border-top: 1px solid #e5e5e5 !important;
+                padding-top: 20px;
+                margin-top: 20px;
+            }
+            
+            .woocommerce-checkout #order_review .order-total th,
+            .woocommerce-checkout #order_review .order-total td {
+                font-size: 16px;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.1em;
+            }
+            
+            /* Tối ưu Input fields chung - Đồng bộ với Select2 */
+            .woocommerce-checkout textarea {
+                width: 100% !important;
+                padding: 12px 16px !important;
+                border: 1px solid #e5e5e5 !important;
+                border-radius: 0px !important;
+                font-size: 14px;
+                font-weight: 300;
+                transition: border-color 0.3s ease;
+                background-color: #fff;
+                min-height: 100px;
+            }
+            
+            .woocommerce-checkout textarea:focus {
+                border-color: #000 !important;
+                outline: none;
+            }
+            
+            /* Focus state cho tất cả input/select/select2 */
+            .woocommerce-checkout input[type="text"]:focus,
+            .woocommerce-checkout input[type="email"]:focus,
+            .woocommerce-checkout input[type="tel"]:focus,
+            .woocommerce-checkout select:focus,
+            .woocommerce-checkout .select2-container--default.select2-container--focus .select2-selection--single {
+                border-color: #000 !important;
+                outline: none;
+            }
+            
+            /* Ép chiều cao và style cho cả ô input lẫn dropdown Select2 - Đồng bộ hoàn toàn */
+            .woocommerce-checkout .select2-container--default .select2-selection--single,
+            .woocommerce-checkout .select2-container .select2-selection--single,
+            .woocommerce-checkout input[type="text"],
+            .woocommerce-checkout input[type="tel"],
+            .woocommerce-checkout input[type="email"],
+            .woocommerce-checkout select {
+                height: 50px !important;
+                line-height: 50px !important;
+                border: 1px solid #e5e5e5 !important;
+                border-radius: 0px !important;
+                padding: 0 15px !important;
+                background-color: #fff !important;
+                width: 100% !important;
+                display: flex !important;
+                align-items: center !important;
+                box-sizing: border-box !important;
+            }
+            
+            /* Xử lý phần text bên trong của Select2 bị lệch lên trên */
+            .woocommerce-checkout .select2-container--default .select2-selection--single .select2-selection__rendered {
+                line-height: 50px !important;
+                padding-left: 0 !important;
+                color: #1a1a1a !important;
+                font-size: 14px !important;
+                font-weight: 300 !important;
+            }
+            
+            /* Ẩn cái mũi tên mặc định xấu xí của Select2 để làm mũi tên mới sang hơn */
+            .woocommerce-checkout .select2-container--default .select2-selection--single .select2-selection__arrow {
+                height: 50px !important;
+                top: 0 !important;
+                right: 10px !important;
+            }
+            
+            .woocommerce-checkout .select2-container--default.select2-container--focus .select2-selection--single {
+                border-color: #000 !important;
+            }
+            
+            /* Fix lỗi các trường Tỉnh/Huyện bị nhảy hàng không đều */
+            .woocommerce-checkout .form-row {
+                display: block !important;
+                width: 100% !important;
+                float: none !important;
+                margin-right: 0 !important;
+            }
+            
+            /* Xử lý "Dấu sao" bắt buộc bị lệch */
+            .woocommerce-checkout abbr.required {
+                text-decoration: none !important;
+                color: #ff0000 !important;
+                font-size: 16px;
+                margin-left: 4px;
+            }
+            
+            /* Clear floats */
+            .woocommerce-checkout .form-row::after {
+                content: "";
+                display: table;
+                clear: both;
+            }
+        </style>
+        <?php
+    }
+}
+add_action('wp_head', 'hoangphi_checkout_custom_styles');
+
+/**
+ * Ép WooCommerce sử dụng template checkout từ theme
+ */
+add_filter( 'woocommerce_locate_template', 'hoangphi_force_checkout_template', 10, 3 );
+function hoangphi_force_checkout_template( $template, $template_name, $template_path ) {
+    if ( 'checkout/form-checkout.php' === $template_name ) {
+        $theme_file = get_stylesheet_directory() . '/woocommerce/checkout/form-checkout.php';
+        if ( file_exists( $theme_file ) ) {
+            return $theme_file;
+        }
+    }
+    return $template;
+}
+
+/**
+ * Việt hóa text đăng ký nhận bản tin và Personal Data - Luxury Style
+ */
+add_filter( 'gettext', 'hoangphi_luxury_translate_text', 20, 3 );
+function hoangphi_luxury_translate_text( $translated_text, $text, $domain ) {
+    // Các biến thể text đăng ký newsletter phổ biến
+    $newsletter_texts = array(
+        'I would like to receive exclusive emails with discounts and product information',
+        'Subscribe to our newsletter',
+        'Sign up for our newsletter',
+        'I want to receive marketing emails',
+        'Email me with news and special offers'
+    );
+    
+    if ( in_array( $text, $newsletter_texts ) ) {
+        $translated_text = 'Đăng ký nhận ưu đãi đặc quyền và thông tin sản phẩm mới nhất.';
+    }
+    
+    // Việt hóa text Personal Data
+    if ( strpos( $text, 'Your personal data will be used' ) !== false ) {
+        $translated_text = 'Thông tin cá nhân của bạn sẽ được sử dụng để bảo mật và tối ưu trải nghiệm mua sắm tại Hoang Phi theo chính sách riêng tư của chúng tôi.';
+    }
+    
+    return $translated_text;
+}
+
+/**
+ * Triển khai VietQR tự động cho trang Thank You Page
+ * Tự động lấy thông tin từ WooCommerce Settings (BACS Account Details)
+ * Sử dụng hook woocommerce_thankyou_bacs - chỉ hiển thị khi payment method là BACS
+ */
+add_action( 'woocommerce_thankyou_bacs', 'hoangphi_display_vietqr_from_settings', 20 );
+function hoangphi_display_vietqr_from_settings( $order_id ) {
+    $order = wc_get_order( $order_id );
+    if ( ! $order ) {
+        return;
+    }
+    
+    // 1. Lấy danh sách tài khoản ngân hàng bạn đã cài trong Admin
+    $bacs_info = get_option( 'woocommerce_bacs_accounts' );
+    
+    if ( ! empty( $bacs_info ) ) {
+        // Lấy tài khoản đầu tiên trong danh sách
+        $account = $bacs_info[0];
+        
+        $bank_id      = $account['bank_name']; // Sẽ lấy "TP BANK"
+        $account_no   = $account['account_number']; // Sẽ lấy "62626926789"
+        $account_name = $account['account_name']; // Sẽ lấy "NGUYEN MINH HIEU"
+        
+        // 2. Format lại Bank ID cho đúng chuẩn VietQR (Xóa khoảng trắng)
+        // Ví dụ: "TP BANK" -> "TPB" hoặc "TPBank"
+        $bank_id_formatted = str_replace(' ', '', $bank_id);
+        if ( $bank_id_formatted == 'TPBANK' ) {
+            $bank_id_formatted = 'TPB';
+        }
+        // Thêm các mapping khác nếu cần
+        $bank_mapping = array(
+            'TPBANK' => 'TPB',
+            'VIETCOMBANK' => 'VCB',
+            'VPBANK' => 'VPB',
+            'TECHCOMBANK' => 'TCB',
+            'ACBANK' => 'ACB',
+            'VIETINBANK' => 'VTB',
+            'BIDV' => 'BID',
+        );
+        
+        $bank_id_upper = strtoupper( $bank_id_formatted );
+        if ( isset( $bank_mapping[ $bank_id_upper ] ) ) {
+            $bank_id_formatted = $bank_mapping[ $bank_id_upper ];
+        }
+        
+        $amount = $order->get_total();
+        $memo   = 'HP' . $order_id;
+        
+        // 3. Tạo URL VietQR
+        $qr_url = sprintf(
+            'https://img.vietqr.io/image/%s-%s-compact2.png?amount=%s&addInfo=%s&accountName=%s',
+            $bank_id_formatted,
+            $account_no,
+            intval( $amount ),
+            urlencode( $memo ),
+            urlencode( $account_name )
+        );
+        
+        // 4. Hiển thị ra giao diện Luxury
+        ?>
+        <div class="vietqr-payment-wrapper" style="margin: 40px 0; text-align: center; font-family: sans-serif;">
+            <div style="background: #fff; border: 1px solid #f2f2f2; padding: 30px; display: inline-block; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
+                <h3 style="font-size: 13px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 20px; color: #888;">Quét mã để thanh toán</h3>
+                <img src="<?php echo esc_url( $qr_url ); ?>" style="max-width: 280px; height: auto; margin-bottom: 15px; border-radius: 8px;" alt="Mã QR thanh toán" />
+                <p style="font-size: 15px; font-weight: 600; margin: 5px 0;">Nội dung: <span style="color: #000;"><?php echo esc_html( $memo ); ?></span></p>
+                <p style="font-size: 12px; color: #999; margin-top: 10px;">Chủ TK: <?php echo esc_html( $account_name ); ?></p>
+            </div>
+        </div>
+        <?php
+    }
+}

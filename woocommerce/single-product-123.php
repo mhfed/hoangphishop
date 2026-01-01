@@ -16,7 +16,7 @@
                         <?php $video_url = get_field('video_reel'); ?>
                         <?php if($video_url): ?>
                             <div class="relative aspect-[9/16] max-w-[300px] mx-auto rounded-xl overflow-hidden shadow-lg group">
-                                <video src="<?php echo $video_url; ?>" autoplay muted loop playsinline class="w-full h-full object-cover"></video>
+                                <video src="<?php echo $video_url; ?>" autoplay muted loop playsinline class="w-full h-full object-cover" style="aspect-ratio: 9/16; width: 100%; height: 100%;"></video>
                                 <div class="absolute inset-0 bg-black/10 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                                     <span class="text-white text-[10px] uppercase tracking-widest font-bold">Product Reel</span>
                                 </div>

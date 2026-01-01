@@ -13,10 +13,13 @@ if ( empty( $product ) || ! $product->is_visible() ) return;
 ?>
 
 <div class="product-card group relative">
-    <div class="relative aspect-square overflow-hidden bg-[#f9f9f9] border border-gray-100">
-        <a href="<?php the_permalink(); ?>">
-            <?php echo $product->get_image( 'woocommerce_thumbnail', array( 'class' => 'w-full h-full object-cover transition-transform duration-700 group-hover:scale-105' ) ); ?>
-        </a>
+    <!-- Aspect Ratio Box -->
+    <div class="relative aspect-[3/4] overflow-hidden bg-gray-50 border border-gray-100">
+        <div class="w-full h-full">
+            <a href="<?php the_permalink(); ?>" class="block w-full h-full">
+                <?php echo $product->get_image( 'woocommerce_thumbnail', array( 'class' => 'w-full h-full object-cover transition-transform duration-700 group-hover:scale-105' ) ); ?>
+            </a>
+        </div>
         
         <?php if ( $product->is_on_sale() ) : ?>
             <span class="absolute top-3 left-3 bg-white text-black text-[10px] font-bold py-1 px-3 uppercase tracking-widest shadow-sm">Sale</span>

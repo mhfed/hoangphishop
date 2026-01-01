@@ -166,4 +166,11 @@
 
 
     <?php wp_footer(); ?>
+    
+    <!-- NProgress - Top Loading Bar -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.css" />
+    <script src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js"></script>
+    
+    <!-- Instant.page - Tăng tốc độ chuyển trang -->
+    <script src="https://instant.page/5.2.0" type="module" integrity="sha384-jnZyxPjiipE5yH3kc3GpK5g2jKZ6I7o7q3TEEy2UJyPcyXMkYrkd4G1wKagq3F" crossorigin="anonymous"></script>
 </footer>

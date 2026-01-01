@@ -8,13 +8,13 @@
  */
 ?>
 
-<section class="reels-section py-20 bg-white overflow-hidden">
+<section class="reels-section py-20 bg-white overflow-hidden min-h-[400px]">
     <div class="px-6 mb-12 text-center">
         <h2 class="text-2xl md:text-3xl font-light tracking-[0.3em] uppercase text-gray-900">The Reel Experience</h2>
     </div>
 
     <div class="relative">
-        <div class="swiper reelsSwiper px-6 overflow-hidden">
+        <div class="swiper reelsSwiper px-6 overflow-hidden" style="min-height: 400px;">
             <div class="swiper-wrapper h-fit">
                 <?php
                 // Lấy các bài viết từ custom post type 'reels'
@@ -38,26 +38,29 @@
                             ?>
                             <div class="swiper-slide">
                                 <a href="<?php echo esc_url( $product_permalink ); ?>" 
-                                   class="block relative aspect-[9/16] rounded-[24px] overflow-hidden bg-gray-100 group shadow-sm hover:shadow-xl transition-all duration-500">
-                                    <video autoplay muted loop playsinline 
-                                           class="absolute inset-0 w-full h-full object-cover scale-100 group-hover:scale-110 transition-transform duration-700"
-                                           loading="lazy">
-                                        <source src="<?php echo esc_url( $video_url ); ?>" type="video/mp4">
-                                    </video>
-                                    
-                                    <!-- Overlay Gradient -->
-                                    <div class="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/60 to-transparent"></div>
-                                    
-                                    <!-- Info -->
-                                    <div class="absolute inset-x-0 bottom-0 p-5 bg-gradient-to-t from-black/80 pt-10">
-                                        <?php if ( $label ) : ?>
-                                            <p class="text-[9px] text-white/70 uppercase tracking-widest mb-1">
-                                                <?php echo esc_html( $label ); ?>
-                                            </p>
-                                        <?php endif; ?>
-                                        <h3 class="text-[11px] font-bold text-white tracking-widest uppercase leading-tight">
-                                            <?php echo esc_html( $product_title ); ?>
-                                        </h3>
+                                   class="block relative rounded-[24px] overflow-hidden bg-gray-100 group shadow-sm hover:shadow-xl transition-all duration-500">
+                                    <!-- Aspect Ratio Box -->
+                                    <div class="aspect-[9/16] w-full relative">
+                                        <video autoplay muted loop playsinline 
+                                               class="reel-video w-full h-full object-cover scale-100 group-hover:scale-110 transition-transform duration-700"
+                                               loading="lazy">
+                                            <source src="<?php echo esc_url( $video_url ); ?>" type="video/mp4">
+                                        </video>
+                                        
+                                        <!-- Overlay Gradient -->
+                                        <div class="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/60 to-transparent"></div>
+                                        
+                                        <!-- Info -->
+                                        <div class="absolute inset-x-0 bottom-0 p-5 bg-gradient-to-t from-black/80 pt-10">
+                                            <?php if ( $label ) : ?>
+                                                <p class="text-[9px] text-white/70 uppercase tracking-widest mb-1">
+                                                    <?php echo esc_html( $label ); ?>
+                                                </p>
+                                            <?php endif; ?>
+                                            <h3 class="text-[11px] font-bold text-white tracking-widest uppercase leading-tight">
+                                                <?php echo esc_html( $product_title ); ?>
+                                            </h3>
+                                        </div>
                                     </div>
                                 </a>
                             </div>

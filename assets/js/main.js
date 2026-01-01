@@ -1,4 +1,159 @@
+// ============================================
+// Font Face Observer - Tránh FOUT
+// ============================================
+(function () {
+  // Chỉ hiện trang khi font đã load hoặc sau tối đa 500ms
+  const fontLoaded = new Promise((resolve) => {
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(() => {
+        resolve();
+      });
+    } else {
+      // Fallback cho trình duyệt cũ
+      setTimeout(resolve, 500);
+    }
+  });
+
+  fontLoaded.then(() => {
+    document.documentElement.classList.add('fonts-loaded');
+  });
+
+  // Fallback: Hiện trang sau 500ms nếu font chưa load
+  setTimeout(() => {
+    document.documentElement.classList.add('fonts-loaded');
+  }, 500);
+})();
+
+// ============================================
+// NProgress - Top Loading Bar
+// ============================================
+if (typeof NProgress !== 'undefined') {
+  // Cấu hình NProgress
+  NProgress.configure({
+    showSpinner: false,
+    trickleSpeed: 200,
+    minimum: 0.08,
+  });
+
+  // Bắt đầu khi trang đang load
+  NProgress.start();
+
+  // Kết thúc khi trang load xong
+  window.addEventListener('load', function () {
+    NProgress.done();
+
+    // Hiệu ứng Reveal cho nội dung
+    const mainContent =
+      document.getElementById('primary') ||
+      document.querySelector('main') ||
+      document.body;
+    if (mainContent) {
+      mainContent.style.opacity = '0';
+      mainContent.style.transform = 'translateY(20px)';
+      mainContent.style.transition =
+        'opacity 1s ease-out, transform 1s ease-out';
+
+      setTimeout(() => {
+        mainContent.style.opacity = '1';
+        mainContent.style.transform = 'translateY(0)';
+      }, 100);
+    }
+  });
+
+  // Xử lý khi click vào link (chuyển trang)
+  document.addEventListener('click', function (e) {
+    const link = e.target.closest('a');
+    if (
+      link &&
+      link.href &&
+      !link.target &&
+      link.hostname === window.location.hostname
+    ) {
+      NProgress.start();
+    }
+  });
+}
+
 document.addEventListener('DOMContentLoaded', function () {
+  // ============================================
+  // Skeleton Loading cho Videos
+  // ============================================
+  // Hero Banner Videos
+  const heroVideos = document.querySelectorAll(
+    '.hero-video-desktop, .hero-video-mobile'
+  );
+  heroVideos.forEach((video) => {
+    const skeleton = document.querySelector('.hero-video-skeleton');
+    if (skeleton) {
+      video.addEventListener('loadeddata', () => {
+        skeleton.style.opacity = '0';
+        setTimeout(() => {
+          skeleton.style.display = 'none';
+        }, 300);
+      });
+
+      // Fallback: Ẩn skeleton sau 5 giây nếu video không load
+      setTimeout(() => {
+        if (skeleton) {
+          skeleton.style.opacity = '0';
+          setTimeout(() => {
+            skeleton.style.display = 'none';
+          }, 300);
+        }
+      }, 5000);
+    }
+  });
+
+  // Reels Videos
+  const reelVideos = document.querySelectorAll('.reel-video');
+  reelVideos.forEach((video) => {
+    const skeleton = video.parentElement.querySelector('.reel-video-skeleton');
+    if (skeleton) {
+      video.addEventListener('loadeddata', () => {
+        skeleton.style.opacity = '0';
+        setTimeout(() => {
+          skeleton.style.display = 'none';
+        }, 300);
+      });
+
+      // Fallback: Ẩn skeleton sau 5 giây
+      setTimeout(() => {
+        if (skeleton) {
+          skeleton.style.opacity = '0';
+          setTimeout(() => {
+            skeleton.style.display = 'none';
+          }, 300);
+        }
+      }, 5000);
+    }
+  });
+
+  // Single Product Video
+  const productVideos = document.querySelectorAll('.product-video');
+  productVideos.forEach((video) => {
+    const skeleton = video.parentElement.querySelector(
+      '.product-video-skeleton'
+    );
+    if (skeleton) {
+      video.addEventListener('loadeddata', () => {
+        skeleton.style.opacity = '0';
+        setTimeout(() => {
+          skeleton.style.display = 'none';
+        }, 300);
+      });
+
+      // Fallback: Ẩn skeleton sau 5 giây
+      setTimeout(() => {
+        if (skeleton) {
+          skeleton.style.opacity = '0';
+          setTimeout(() => {
+            skeleton.style.display = 'none';
+          }, 300);
+        }
+      }, 5000);
+    }
+  });
+
   // 1. Khởi tạo Swiper
   const swiper = new Swiper('.myReelSwiper', {
     slidesPerView: 1.3, // Trên mobile thấy một phần slide sau để kích thích vuốt

@@ -55,19 +55,21 @@ if ( post_password_required() ) {
                 <!-- Left Column: Sticky Gallery -->
                 <div class="sticky top-24 h-fit">
                     <div id="product-gallery" class="space-y-6">
-                        <!-- Main Image Display -->
+                        <!-- Main Image Display - Aspect Ratio Box -->
                         <div class="aspect-[4/5] rounded-sm overflow-hidden bg-gray-50 mb-4">
-                            <?php 
-                            if ( !empty( $image_ids ) ) {
-                                $main_image_id = $image_ids[0];
-                                echo wp_get_attachment_image( $main_image_id, 'full', false, [
-                                    'class' => 'w-full h-full object-cover',
-                                    'id' => 'main-product-image'
-                                ] );
-                            } else {
-                                echo wc_placeholder_img( 'full' );
-                            }
-                            ?>
+                            <div class="w-full h-full">
+                                <?php 
+                                if ( !empty( $image_ids ) ) {
+                                    $main_image_id = $image_ids[0];
+                                    echo wp_get_attachment_image( $main_image_id, 'full', false, [
+                                        'class' => 'w-full h-full object-cover',
+                                        'id' => 'main-product-image'
+                                    ] );
+                                } else {
+                                    echo wc_placeholder_img( 'full' );
+                                }
+                                ?>
+                            </div>
                         </div>
                         
                         <!-- Thumbnail Gallery -->
@@ -96,10 +98,13 @@ if ( post_password_required() ) {
                         $video_url = get_field('video_reel'); 
                         if ( $video_url ) : 
                         ?>
-                            <div class="relative aspect-[9/16] max-w-[300px] mx-auto rounded-xl overflow-hidden shadow-lg group mt-6">
-                                <video src="<?php echo esc_url( $video_url ); ?>" autoplay muted loop playsinline class="w-full h-full object-cover"></video>
-                                <div class="absolute inset-0 bg-black/10 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                                    <span class="text-white text-[10px] uppercase tracking-widest font-bold">Product Reel</span>
+                            <div class="relative max-w-[300px] mx-auto rounded-xl overflow-hidden shadow-lg group mt-6">
+                                <!-- Aspect Ratio Box -->
+                                <div class="aspect-[9/16] w-full">
+                                    <video src="<?php echo esc_url( $video_url ); ?>" autoplay muted loop playsinline class="product-video w-full h-full object-cover"></video>
+                                    <div class="absolute inset-0 bg-black/10 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <span class="text-white text-[10px] uppercase tracking-widest font-bold">Product Reel</span>
+                                    </div>
                                 </div>
                             </div>
                         <?php endif; ?>

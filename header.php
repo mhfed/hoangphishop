@@ -1,3 +1,11 @@
+<!-- Critical Height CSS Inline - Load trước CSS bên ngoài -->
+<style>
+    /* Critical Heights để tránh Layout Shift */
+    header { min-height: 80px; }
+    .hero-banner-section { min-height: 80vh; }
+    .reels-section { min-height: 500px; }
+</style>
+
 <header class="sticky top-0 z-[100] bg-white/90 backdrop-blur-sm border-b border-gray-100">
     <div class="relative max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
         <!-- Mobile Menu Button - Bên trái trên mobile -->
@@ -221,12 +229,12 @@
                     <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                 </svg></button>
             <div class="relative group cursor-pointer">
-                <a class="cart-contents" href="<?php echo wc_get_cart_url(); ?>" title="Xem giỏ hàng">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <a class="cart-contents inline-flex items-center justify-center" href="<?php echo wc_get_cart_url(); ?>" title="Xem giỏ hàng" style="width: 20px; height: 20px;">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 20px; height: 20px; flex-shrink: 0;">
                         <path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
                     </svg>
                     <span
-                        class="cart-contents-count cart-count absolute -top-2 -right-2 bg-black text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center">
+                        class="cart-contents-count cart-count absolute -top-2 -right-2 bg-black text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center" style="min-width: 16px; min-height: 16px;">
                         <?php echo WC()->cart->get_cart_contents_count(); ?>
                     </span>
                 </a>

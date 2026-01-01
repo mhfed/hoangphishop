@@ -5,7 +5,12 @@
  */
 
 function hoangphi_assets() {
-    // 1. Google Fonts - Load trước để tránh nhảy font (FOUT)
+    // 1. Preload Font quan trọng nhất (Inter 300 - font chính)
+    add_action('wp_head', function() {
+        echo '<link rel="preload" href="https://fonts.gstatic.com/s/inter/v13/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuLyfAZ9hiJ-Ek-_EeA.woff2" as="font" type="font/woff2" crossorigin>';
+    }, 1);
+    
+    // 2. Google Fonts - Load trước để tránh nhảy font (FOUT) với font-display: swap
     wp_enqueue_style('hoangphi-fonts', 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap', array(), null);
     
     // 2. Swiper CSS - Dùng cho phần Product Reels
@@ -136,7 +141,7 @@ function hoangphi_display_video_reel() {
         <div class="my-8 p-4 bg-gray-50 rounded-2xl border border-dashed border-gray-200">
             <h4 class="text-[10px] uppercase tracking-widest mb-4 font-bold text-gray-400 text-center">Product in action</h4>
             <div class="aspect-[9/16] max-w-[250px] mx-auto rounded-lg overflow-hidden shadow-2xl">
-                <video src="<?php echo $video_url; ?>" autoplay muted loop playsinline class="w-full h-full object-cover"></video>
+                <video src="<?php echo $video_url; ?>" autoplay muted loop playsinline class="w-full h-full object-cover" style="aspect-ratio: 9/16; width: 100%; height: 100%;"></video>
             </div>
         </div>
         <?php
@@ -187,30 +192,37 @@ function hoangphi_render_hero_banner() {
     $img_desktop = get_field('hero_image_desktop', $settings_id);
     $img_mobile = get_field('hero_image_mobile', $settings_id);
     ?>
-    <section class="relative h-[80vh] w-full overflow-hidden bg-white">
+    <section class="hero-banner-section relative min-h-[80vh] h-[80vh] w-full overflow-hidden bg-[#f9f9f9]">
         
         <?php if ($type == 'video') : ?>
-            <!-- Video: Vẫn dùng cách cũ vì <picture> chỉ cho ảnh -->
+            <!-- Video: Aspect Ratio Box -->
             <div class="absolute inset-0">
-                <video autoplay muted loop playsinline class="hidden md:block w-full h-full object-cover">
-                    <source src="<?php echo esc_url( get_field('hero_video_desktop', $settings_id) ); ?>" type="video/mp4">
-                </video>
-                <video autoplay muted loop playsinline class="block md:hidden w-full h-full object-cover">
-                    <source src="<?php echo esc_url( get_field('hero_video_mobile', $settings_id) ); ?>" type="video/mp4">
-                </video>
+                <div class="aspect-[16/9] md:aspect-[16/9] w-full h-full">
+                    <video autoplay muted loop playsinline class="hidden md:block w-full h-full object-cover hero-video-desktop">
+                        <source src="<?php echo esc_url( get_field('hero_video_desktop', $settings_id) ); ?>" type="video/mp4">
+                    </video>
+                    <div class="aspect-[9/16] md:hidden w-full h-full">
+                        <video autoplay muted loop playsinline class="block md:hidden w-full h-full object-cover hero-video-mobile">
+                            <source src="<?php echo esc_url( get_field('hero_video_mobile', $settings_id) ); ?>" type="video/mp4">
+                        </video>
+                    </div>
+                </div>
                 <div class="absolute inset-0 bg-black/10"></div>
             </div>
         <?php else : ?>
-            <!-- Image: Dùng thẻ <picture> để tối ưu performance -->
-            <picture class="absolute inset-0 w-full h-full">
-                <source srcset="<?php echo esc_url( $img_mobile ); ?>" media="(max-width: 767px)">
-                
-                <img src="<?php echo esc_url( $img_desktop ); ?>" 
-                     alt="Hero Banner" 
-                     class="w-full h-full object-cover object-center"
-                     loading="eager" 
-                     fetchpriority="high">
-            </picture>
+            <!-- Image: Aspect Ratio Box -->
+            <div class="absolute inset-0 aspect-[16/9] w-full h-full">
+                <picture class="w-full h-full">
+                    <source srcset="<?php echo esc_url( $img_mobile ); ?>" media="(max-width: 767px)">
+                    <img src="<?php echo esc_url( $img_desktop ); ?>" 
+                         alt="Hero Banner" 
+                         class="w-full h-full object-cover object-center"
+                         loading="eager" 
+                         fetchpriority="high"
+                         width="1920"
+                         height="1080">
+                </picture>
+            </div>
         <?php endif; ?>
 
         <div class="relative z-10 h-full flex flex-col items-center justify-center text-center px-6 bg-black/5">

@@ -358,6 +358,143 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     });
   }
+
+  // ============================================
+  // Mobile Menu Handler - Slide-out Drawer
+  // ============================================
+  // Sử dụng event delegation để đảm bảo luôn bắt được click
+  document.addEventListener('click', function (e) {
+    // Kiểm tra nếu click vào nút mở menu
+    const openBtn = e.target.closest('#open-mobile-menu');
+    if (openBtn) {
+      e.preventDefault();
+      e.stopPropagation();
+      console.log('Mobile menu open button clicked');
+
+      const menu = document.getElementById('mobile-menu');
+      const overlay = document.getElementById('mobile-menu-overlay');
+      const content = document.getElementById('mobile-menu-content');
+
+      console.log('Menu elements:', { menu, overlay, content });
+
+      if (menu && content) {
+        // Loại bỏ pointer-events-none khỏi #mobile-menu
+        menu.classList.remove('pointer-events-none');
+        // Xóa translate-x-full khỏi #mobile-menu-content
+        content.classList.remove('translate-x-full');
+        // Thêm opacity-100 cho overlay
+        if (overlay) {
+          overlay.classList.add('opacity-100');
+        }
+        // Ẩn nút mở menu
+        openBtn.classList.add('hidden');
+        // Chặn cuộn trang web
+        document.body.style.overflow = 'hidden';
+        console.log('Menu opened successfully');
+      } else {
+        console.error('Menu elements not found');
+      }
+    }
+  });
+
+  // Hàm đóng menu
+  function hideMenu() {
+    const menu = document.getElementById('mobile-menu');
+    const overlay = document.getElementById('mobile-menu-overlay');
+    const content = document.getElementById('mobile-menu-content');
+    const openBtn = document.getElementById('open-mobile-menu');
+
+    if (!menu || !overlay || !content) return;
+
+    // Làm ngược lại: thêm pointer-events-none, translate-x-full, và xóa opacity-100
+    overlay.classList.remove('opacity-100');
+    content.classList.add('translate-x-full');
+    document.body.style.overflow = '';
+
+    // Hiện lại nút mở menu
+    if (openBtn) {
+      openBtn.classList.remove('hidden');
+    }
+
+    setTimeout(() => {
+      menu.classList.add('pointer-events-none');
+    }, 500);
+  }
+
+  // Đóng menu khi click nút đóng hoặc overlay
+  document.addEventListener('click', function (e) {
+    const closeBtn = document.getElementById('close-mobile-menu');
+    const overlay = document.getElementById('mobile-menu-overlay');
+
+    if (e.target === closeBtn || (overlay && e.target === overlay)) {
+      hideMenu();
+    }
+  });
+
+  // Đóng menu khi nhấn ESC
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') {
+      const menu = document.getElementById('mobile-menu');
+      if (menu && !menu.classList.contains('pointer-events-none')) {
+        hideMenu();
+      }
+    }
+  });
+
+  // Logic Accordion cho Sub-menu
+  const toggles = document.querySelectorAll('.mobile-menu-toggle');
+
+  // Khởi tạo: Đảm bảo tất cả mega content đều đóng ban đầu
+  document.querySelectorAll('.mobile-mega-content').forEach((content) => {
+    content.style.maxHeight = '0px';
+  });
+
+  toggles.forEach((toggle) => {
+    toggle.addEventListener('click', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      const parent = this.closest('.mobile-menu-item');
+      const megaContent = parent
+        ? parent.querySelector('.mobile-mega-content')
+        : null;
+      const icon = this.querySelector('.toggle-icon');
+
+      if (megaContent) {
+        // Đóng tất cả mega menu khác
+        document
+          .querySelectorAll('.mobile-mega-content')
+          .forEach((otherContent) => {
+            if (otherContent !== megaContent) {
+              otherContent.style.maxHeight = '0px';
+              const otherButton = otherContent
+                .closest('.mobile-menu-item')
+                ?.querySelector('.mobile-menu-toggle');
+              if (otherButton) {
+                const otherIcon = otherButton.querySelector('.toggle-icon');
+                if (otherIcon) {
+                  otherIcon.textContent = '+';
+                }
+              }
+            }
+          });
+
+        // Toggle mega menu hiện tại: thay đổi max-height từ 0 sang fit-content
+        if (
+          !megaContent.style.maxHeight ||
+          megaContent.style.maxHeight === '0px'
+        ) {
+          // Mở ra: dùng fit-content
+          megaContent.style.maxHeight = megaContent.scrollHeight + 'px';
+          if (icon) icon.textContent = '−';
+        } else {
+          // Đóng lại
+          megaContent.style.maxHeight = '0px';
+          if (icon) icon.textContent = '+';
+        }
+      }
+    });
+  });
 });
 
 // (function ($) {

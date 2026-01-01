@@ -1,6 +1,14 @@
-<header class="sticky top-0 z-50 bg-white/90 backdrop-blur-sm border-b border-gray-100">
+<header class="sticky top-0 z-[100] bg-white/90 backdrop-blur-sm border-b border-gray-100">
     <div class="relative max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-        <div class="text-2xl font-light tracking-[0.3em] text-gray-900">
+        <!-- Mobile Menu Button - Bên trái trên mobile -->
+        <button id="open-mobile-menu" class="lg:hidden p-2 hover:opacity-60 transition relative z-[9999]">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>
+        </button>
+
+        <!-- Logo - Ẩn trên mobile, hiện trên desktop -->
+        <div class="text-2xl font-light tracking-[0.3em] text-gray-900 hidden lg:block">
             <a href="<?php echo esc_url( home_url( '/' ) ); ?>">HOANG PHI</a>
         </div>
 
@@ -206,6 +214,7 @@
             <?php endif; ?>
         </nav>
 
+        <!-- Icons bên phải (Search, Cart) -->
         <div class="flex items-center space-x-6">
             <button id="open-search" class="hover:opacity-60 transition"><svg class="w-5 h-5" fill="none" stroke="currentColor"
                     viewBox="0 0 24 24">
@@ -226,4 +235,5 @@
     </div>
     <?php wp_head(); ?>
     <?php get_template_part( 'template-parts/search-overlay' ); ?>
+    <?php get_template_part( 'template-parts/mobile-menu' ); ?>
 </header>

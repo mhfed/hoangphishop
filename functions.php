@@ -120,18 +120,45 @@ function hoangphi_force_load_wc_scripts() {
 add_action('wp_enqueue_scripts', 'hoangphi_force_load_wc_scripts');
 
 /**
- * Đảm bảo cart count và cart total được cập nhật trong fragments
+ * Cập nhật toàn bộ Mini Cart và Số lượng qua AJAX
  */
-function hoangphi_add_cart_count_to_fragments($fragments) {
-    // Cập nhật cart count
-    $fragments['.cart-contents-count'] = '<span class="cart-contents-count cart-count absolute -top-2 -right-2 bg-black text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center">' . WC()->cart->get_cart_contents_count() . '</span>';
+add_filter( 'woocommerce_add_to_cart_fragments', 'hoangphi_refresh_mini_cart_completely' );
+function hoangphi_refresh_mini_cart_completely( $fragments ) {
+    // 1. Cập nhật icon số lượng (như đã làm)
+    ob_start();
+    $count = WC()->cart->get_cart_contents_count();
+    ?>
+    <div class="header-cart-wrapper">
+        <a class="cart-contents relative group" href="<?php echo wc_get_cart_url(); ?>">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+            </svg>
+            <span id="cart-count-global" class="cart-contents-count absolute -top-2 -right-2 bg-black text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center">
+                <?php echo $count; ?>
+            </span>
+        </a>
+    </div>
+    <?php
+    $fragments['div.header-cart-wrapper'] = ob_get_clean();
+
+    // 2. Cập nhật NỘI DUNG bên trong Mini Cart (Danh sách sản phẩm, Số lượng x Giá)
+    ob_start();
+    ?>
+    <div class="widget_shopping_cart_content">
+        <?php woocommerce_mini_cart(); ?>
+    </div>
+    <?php
+    $fragments['div.widget_shopping_cart_content'] = ob_get_clean();
     
-    // Cập nhật cart total trong side cart
-    $fragments['#cart-total'] = WC()->cart->get_cart_total();
-    
+    // 3. Cập nhật cart total trong side cart
+    ob_start();
+    ?>
+    <span id="cart-total"><?php echo WC()->cart->get_cart_total(); ?></span>
+    <?php
+    $fragments['#cart-total'] = ob_get_clean();
+
     return $fragments;
 }
-add_filter('woocommerce_add_to_cart_fragments', 'hoangphi_add_cart_count_to_fragments');
 
 // 1. Định nghĩa nội dung bạn muốn chèn (Cái "áo")
 function hoangphi_display_video_reel() {

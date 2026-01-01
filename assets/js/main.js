@@ -281,13 +281,26 @@ jQuery(document).ready(function ($) {
       // Áp dụng cart fragments để cập nhật cart count và side cart
       if (response.fragments) {
         $.each(response.fragments, function (key, value) {
-          $(key).replaceWith(value);
+          const $target = $(key);
+          if ($target.length) {
+            // Nếu là mini cart content, thay thế toàn bộ
+            if (key === '#mini-cart-content') {
+              $target.html(value);
+            } else {
+              $target.replaceWith(value);
+            }
+          }
         });
       }
 
       // Cập nhật cart total nếu có trong response
       if (response.cart_total) {
         jQuery('#cart-total').html(response.cart_total);
+      }
+
+      // Force update cart hash để WooCommerce nhận diện cart mới
+      if (response.cart_hash) {
+        $('body').trigger('wc_fragment_refresh', [response.cart_hash]);
       }
 
       // Kích hoạt sự kiện để các script khác có thể lắng nghe
@@ -336,6 +349,35 @@ jQuery(document).ready(function ($) {
     $('#close-side-cart, #side-cart-overlay').on('click', closeSideCart);
 
     // TỰ ĐỘNG MỞ KHI THÊM SẢN PHẨM THÀNH CÔNG
+    // ============================================
+    // Toast Notification - Shopee Style
+    // ============================================
+    function showToast() {
+      // Tạo element toast
+      const toast = jQuery(`
+        <div class="fixed top-1/2 left-1/2 z-[10000] flex flex-col items-center justify-center bg-black/80 backdrop-blur-md text-white px-8 py-6 rounded-2xl shadow-2xl animate-toast pointer-events-none">
+          <div class="mb-3">
+            <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+            </svg>
+          </div>
+          <p class="text-sm font-medium tracking-widest uppercase">Đã thêm vào giỏ hàng</p>
+        </div>
+      `);
+
+      jQuery('body').append(toast);
+
+      // Tự dọn dẹp sau khi ẩn
+      setTimeout(() => {
+        toast.remove();
+      }, 2200);
+    }
+
+    // Lắng nghe sự kiện added_to_cart của WooCommerce
+    jQuery(document.body).on('added_to_cart', function () {
+      showToast();
+    });
+
     $(document.body).on(
       'added_to_cart',
       function (event, fragments, cart_hash, $button) {
@@ -344,6 +386,32 @@ jQuery(document).ready(function ($) {
         setTimeout(function () {
           openSideCart();
         }, 100);
+      }
+    );
+
+    // Ép cập nhật fragments và tự động mở side cart
+    jQuery(document.body).on(
+      'added_to_cart',
+      function (event, fragments, cart_hash) {
+        // Nếu fragments có tồn tại, ép UI cập nhật lại lần nữa cho chắc
+        if (fragments) {
+          $.each(fragments, function (key, value) {
+            $(key).replaceWith(value);
+          });
+        }
+
+        // Hiệu ứng Bounce nhẹ cho cái số khi nó thay đổi (Luxury touch)
+        $('#cart-count-global').addClass('scale-125 bg-red-600');
+        setTimeout(function () {
+          $('#cart-count-global').removeClass('scale-125 bg-red-600');
+        }, 300);
+
+        // Mở Side Cart drawer
+        $('#side-cart').removeClass('translate-x-full');
+        $('#side-cart-overlay')
+          .removeClass('opacity-0 invisible')
+          .addClass('opacity-100 visible');
+        $('body').addClass('overflow-hidden');
       }
     );
   });
@@ -648,6 +716,87 @@ document.addEventListener('DOMContentLoaded', function () {
           if (icon) icon.textContent = '+';
         }
       }
+    });
+  });
+});
+
+// ============================================
+// AJAX Add to Cart cho Single Product - Không load lại trang
+// ============================================
+jQuery(function ($) {
+  // Xử lý AJAX cho trang Single Product
+  $(document).on('submit', 'form.cart', function (e) {
+    // Bỏ qua sản phẩm external (link ra ngoài)
+    if ($(this).closest('.product').hasClass('product-type-external')) return;
+
+    e.preventDefault();
+    const $form = $(this);
+    const $button = $form.find('.single_add_to_cart_button');
+
+    // Lấy dữ liệu từ form
+    const product_id = $form.find('[name=add-to-cart]').val();
+    const quantity = $form.find('[name=quantity]').val() || 1;
+    const variation_id = $form.find('[name=variation_id]').val();
+
+    // Chuẩn bị data để gửi
+    const data =
+      $form.serialize() +
+      '&action=woocommerce_add_to_cart&add-to-cart=' +
+      product_id;
+
+    // Hiển thị trạng thái loading
+    $button.addClass('loading opacity-50').prop('disabled', true);
+
+    // Gửi AJAX request
+    $.post(wc_add_to_cart_params.ajax_url, data, function (response) {
+      if (!response) {
+        $button.removeClass('loading opacity-50').prop('disabled', false);
+        return;
+      }
+
+      // Nếu có lỗi và có URL, redirect đến trang đó
+      if (response.error && response.product_url) {
+        window.location = response.product_url;
+        return;
+      }
+
+      // Áp dụng cart fragments trước khi trigger events
+      if (response.fragments) {
+        $.each(response.fragments, function (key, value) {
+          const $target = $(key);
+          if ($target.length) {
+            // Nếu là mini cart content, thay thế toàn bộ
+            if (key === '#mini-cart-content') {
+              $target.html(value);
+            } else {
+              $target.replaceWith(value);
+            }
+          }
+        });
+      }
+
+      // Cập nhật cart total nếu có
+      if (response.cart_total) {
+        $('#cart-total').html(response.cart_total);
+      }
+
+      // Force update cart hash
+      if (response.cart_hash) {
+        $('body').trigger('wc_fragment_refresh', [response.cart_hash]);
+      }
+
+      // Trigger các sự kiện của WooCommerce để cập nhật Mini Cart và Fragments
+      $(document.body).trigger('added_to_cart', [
+        response.fragments,
+        response.cart_hash,
+        $button,
+      ]);
+
+      // Toast thành công đã có ở script trước sẽ tự chạy
+      $button.removeClass('loading opacity-50').prop('disabled', false);
+    }).fail(function () {
+      // Xử lý lỗi
+      $button.removeClass('loading opacity-50').prop('disabled', false);
     });
   });
 });

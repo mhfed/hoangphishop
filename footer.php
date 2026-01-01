@@ -141,7 +141,9 @@
             
             <!-- Cart Content -->
             <div class="flex-grow overflow-y-auto p-6" id="mini-cart-content">
-                <?php woocommerce_mini_cart(); ?>
+                <div class="widget_shopping_cart_content">
+                    <?php woocommerce_mini_cart(); ?>
+                </div>
             </div>
 
             <!-- Footer với Total và Checkout -->
